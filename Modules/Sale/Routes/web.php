@@ -11,10 +11,14 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 Route::group(['middleware' => 'auth'], function () {
 
     //POS
     Route::get('/app/pos', 'PosController@index')->name('app.pos.index');
+    Route::get('/app/pos/buyback', 'PosController@buyBack')->name('app.pos.buyback');
+    Route::get('/app/pos/tradein', 'PosController@tradeIn')->name('app.pos.tradein');
     Route::post('/app/pos', 'PosController@store')->name('app.pos.store');
 
     //Generate PDF

@@ -11,10 +11,17 @@
 </ul>
 <ul class="c-header-nav ml-auto mr-4">
     @can('create_pos_sales')
-    <li class="c-header-nav-item mr-3">
-        <a class="btn btn-primary btn-pill {{ request()->routeIs('app.pos.index') ? 'disabled' : '' }}" href="{{ route('app.pos.index') }}">
-            <i class="bi bi-cart mr-1"></i> POS System
-        </a>
+    <li class="c-header-nav-item">
+        <div class="dropdown">
+            <button class="btn btn-primary btn-pill dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-cart mr-1"></i> POS System
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item {{ request()->routeIs('app.pos.index') ? 'disabled' : '' }}" href="{{ route('app.pos.index') }}">Transaction</a></li>
+                <li><a class="dropdown-item {{ request()->routeIs('app.pos.buyback') ? 'disabled' : '' }}" href="{{ route('app.pos.buyback') }}"">Buyback</a></li>
+                <li><a class="dropdown-item {{ request()->routeIs('app.pos.tradein') ? 'disabled' : '' }}" href="{{ route('app.pos.tradein') }}"">Trade-In</a></li>
+            </ul>
+        </div>
     </li>
     @endcan
 
