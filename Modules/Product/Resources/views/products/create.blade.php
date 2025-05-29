@@ -110,11 +110,11 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="product_tax_type">Tax type</label>
-                                        <select class="form-control" name="product_tax_type" id="product_tax_type">
-                                            <option value="" selected >Select Tax Type</option>
-                                            <option value="1">Exclusive</option>
-                                            <option value="2">Inclusive</option>
+                                        <label for="product_type">Product Type</label>
+                                        <select class="form-control" name="product_type" id="product_type">
+                                            <option value="" selected >Select Product Type</option>
+                                            <option value="Normal">Normal</option>
+                                            <option value="Buy Back">Buy Back</option>
                                         </select>
                                     </div>
                                 </div>

@@ -25,8 +25,10 @@
                     <div class="row">
                         <div class="col-lg-7">
                             <input type="hidden" value="{{ $customer_id }}" name="customer_id">
-                            <input type="hidden" value="{{ $global_tax }}" name="tax_percentage">
-                            <input type="hidden" value="{{ $global_discount }}" name="discount_percentage">
+                            {{-- Remove tax --}}
+                            {{-- <input type="hidden" value="{{ $global_tax }}" name="tax_percentage"> --}}
+                            {{-- Change discount to fixed amount --}}
+                            <input type="hidden" value="{{ $global_discount }}" name="discount_amount">
                             <input type="hidden" value="{{ $shipping }}" name="shipping_amount">
                             <div class="form-row">
                                 <div class="col-lg-6">
@@ -42,6 +44,7 @@
                                     </div>
                                 </div>
                             </div>
+                            {{-- Remove payment method and note fields unchanged --}}
                             <div class="form-group">
                                 <label for="payment_method">Payment Method <span class="text-danger">*</span></label>
                                 <select class="form-control" name="payment_method" id="payment_method" required>
@@ -63,18 +66,19 @@
                                     <tr>
                                         <th>Total Products</th>
                                         <td>
-                                                <span class="badge badge-success">
-                                                    {{ Cart::instance($cart_instance)->count() }}
-                                                </span>
+                                            <span class="badge badge-success">
+                                                {{ Cart::instance($cart_instance)->count() }}
+                                            </span>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    {{-- Remove Order Tax row --}}
+                                    {{-- <tr>
                                         <th>Order Tax ({{ $global_tax }}%)</th>
                                         <td>(+) {{ format_currency(Cart::instance($cart_instance)->tax()) }}</td>
-                                    </tr>
+                                    </tr> --}}
                                     <tr>
-                                        <th>Discount ({{ $global_discount }}%)</th>
-                                        <td>(-) {{ format_currency(Cart::instance($cart_instance)->discount()) }}</td>
+                                        <th>Discount</th>
+                                        <td>(-) {{ format_currency($global_discount) }}</td>
                                     </tr>
                                     <tr>
                                         <th>Shipping</th>
@@ -84,7 +88,7 @@
                                     <tr class="text-primary">
                                         <th>Grand Total</th>
                                         @php
-                                            $total_with_shipping = Cart::instance($cart_instance)->total() + (float) $shipping
+                                            $total_with_shipping = Cart::instance($cart_instance)->total() + (float) $shipping - (float) $global_discount
                                         @endphp
                                         <th>
                                             (=) {{ format_currency($total_with_shipping) }}

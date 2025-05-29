@@ -37,6 +37,7 @@
                             <th class="align-middle">Product</th>
                             <th class="align-middle">Price</th>
                             <th class="align-middle">Quantity</th>
+                            {{-- <th class="align-middle">Total Price</th> --}}
                             <th class="align-middle">Action</th>
                         </tr>
                         </thead>
@@ -59,6 +60,10 @@
                                     <td class="align-middle">
                                         @include('livewire.includes.product-cart-quantity')
                                     </td>
+
+                                    {{-- <td class="align-middle">
+                                        {{ format_currency($cart_item->subtotal) }}
+                                    </td> --}}
 
                                     <td class="align-middle text-center">
                                         <a href="#" wire:click.prevent="removeItem('{{ $cart_item->rowId }}')">
@@ -85,13 +90,14 @@
                 <div class="col-md-12">
                     <div class="table-responsive">
                         <table class="table table-striped">
-                            <tr>
+                            {{-- Remove Order Tax row --}}
+                            {{-- <tr>
                                 <th>Order Tax ({{ $global_tax }}%)</th>
                                 <td>(+) {{ format_currency(Cart::instance($cart_instance)->tax()) }}</td>
-                            </tr>
+                            </tr> --}}
                             <tr>
-                                <th>Discount ({{ $global_discount }}%)</th>
-                                <td>(-) {{ format_currency(Cart::instance($cart_instance)->discount()) }}</td>
+                                <th>Discount</th>
+                                <td>(-) {{ format_currency($global_discount) }}</td>
                             </tr>
                             <tr>
                                 <th>Shipping</th>
@@ -101,7 +107,7 @@
                             <tr class="text-primary">
                                 <th>Grand Total</th>
                                 @php
-                                    $total_with_shipping = Cart::instance($cart_instance)->total() + (float) $shipping
+                                    $total_with_shipping = Cart::instance($cart_instance)->total() + (float) $shipping - (float) $global_discount
                                 @endphp
                                 <th>
                                     (=) {{ format_currency($total_with_shipping) }}
@@ -111,21 +117,21 @@
                     </div>
                 </div>
             </div>
-
             <div class="form-row">
-                <div class="col-lg-4">
+                {{-- Remove tax percentage input --}}
+                {{-- <div class="col-lg-4">
                     <div class="form-group">
                         <label for="tax_percentage">Order Tax (%)</label>
                         <input wire:model.blur="global_tax" type="number" class="form-control" min="0" max="100" value="{{ $global_tax }}" required>
                     </div>
-                </div>
-                <div class="col-lg-4">
+                </div> --}}
+                <div class="col-lg-6">
                     <div class="form-group">
-                        <label for="discount_percentage">Discount (%)</label>
-                        <input wire:model.blur="global_discount" type="number" class="form-control" min="0" max="100" value="{{ $global_discount }}" required>
+                        <label for="discount_amount">Discount (Amount)</label>
+                        <input wire:model.blur="global_discount" type="number" class="form-control" min="0" value="{{ $global_discount }}" required>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="form-group">
                         <label for="shipping_amount">Shipping</label>
                         <input wire:model.blur="shipping" type="number" class="form-control" min="0" value="0" required step="0.01">

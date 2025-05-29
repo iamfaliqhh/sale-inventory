@@ -93,6 +93,10 @@ class ProductDataTable extends DataTable
                 ->title('Quantity')
                 ->className('text-center align-middle'),
 
+            Column::computed('product_type')
+                ->title('Type')
+                ->className('text-center align-middle'),
+
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

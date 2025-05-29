@@ -20,15 +20,20 @@ class ProductList extends Component
     public $categories;
     public $category_id;
     public $limit = 9;
+    public $product_type;
 
     public function mount($categories) {
         $this->categories = $categories;
         $this->category_id = '';
+        $this->product_type = request()->has('tradein') ? 'Buy Back' : 'Normal';
     }
 
     public function render() {
         return view('livewire.pos.product-list', [
-            'products' => Product::when($this->category_id, function ($query) {
+            'products' => Product::when($this->product_type, function ($query) {
+                return $query->where('product_type', $this->product_type);
+            })
+            ->when($this->category_id, function ($query) {
                 return $query->where('category_id', $this->category_id);
             })
             ->paginate($this->limit)
