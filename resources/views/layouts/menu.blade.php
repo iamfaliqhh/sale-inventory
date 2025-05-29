@@ -312,6 +312,15 @@
                 </li>
             </ul>
         @endcan
+        @can('access_gold_price')
+        <ul class="c-sidebar-nav-dropdown-items">
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link {{ request()->routeIs('gold-price*') ? 'c-active' : '' }}" href="{{ route('gold-price.index') }}">
+                    <i class="c-sidebar-nav-icon bi bi-cash-stack" style="line-height: 1;"></i> Gold Price
+                </a>
+            </li>
+        </ul>
+        @endcan
         @can('access_currencies')
         <ul class="c-sidebar-nav-dropdown-items">
             <li class="c-sidebar-nav-item">

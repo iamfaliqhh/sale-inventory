@@ -114,6 +114,7 @@ class PermissionsTableSeeder extends Seeder
             'delete_currencies',
             //Settings
             'access_settings',
+            'access_gold_prices'
             //Units
             'access_units'
         ];
