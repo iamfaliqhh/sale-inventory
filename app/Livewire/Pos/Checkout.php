@@ -13,7 +13,6 @@ class Checkout extends Component
     public $cart_instance;
     public $customers;
     public $global_discount;
-    public $global_tax;
     public $shipping;
     public $quantity;
     public $check_quantity;
@@ -27,7 +26,6 @@ class Checkout extends Component
         $this->cart_instance = $cartInstance;
         $this->customers = $customers;
         $this->global_discount = 0;
-        $this->global_tax = 0;
         $this->shipping = 0.00;
         $this->check_quantity = [];
         $this->quantity = [];
@@ -57,7 +55,7 @@ class Checkout extends Component
     }
 
     public function calculateTotal() {
-        return Cart::instance($this->cart_instance)->total() + $this->shipping;
+        return Cart::instance($this->cart_instance)->total() + $this->shipping - $this->global_discount;
     }
 
     public function resetCart() {
@@ -106,10 +104,6 @@ class Checkout extends Component
         Cart::instance($this->cart_instance)->remove($row_id);
     }
 
-    public function updatedGlobalTax() {
-        Cart::instance($this->cart_instance)->setGlobalTax((integer)$this->global_tax);
-    }
-
     public function updatedGlobalDiscount() {
         Cart::instance($this->cart_instance)->setGlobalDiscount((integer)$this->global_discount);
     }
@@ -137,10 +131,6 @@ class Checkout extends Component
                 'product_discount_type' => $cart_item->options->product_discount_type,
             ]
         ]);
-    }
-
-    public function updatedDiscountType($value, $name) {
-        $this->item_discount[$name] = 0;
     }
 
     public function discountModalRefresh($product_id, $row_id) {

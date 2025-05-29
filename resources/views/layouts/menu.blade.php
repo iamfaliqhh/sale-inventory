@@ -138,13 +138,14 @@
             <i class="c-sidebar-nav-icon bi bi-receipt" style="line-height: 1;"></i> Sales
         </a>
         @can('create_sales')
-            <ul class="c-sidebar-nav-dropdown-items">
+            {{-- Duh --}}
+            {{-- <ul class="c-sidebar-nav-dropdown-items">
                 <li class="c-sidebar-nav-item">
                     <a class="c-sidebar-nav-link {{ request()->routeIs('sales.create') ? 'c-active' : '' }}" href="{{ route('sales.create') }}">
                         <i class="c-sidebar-nav-icon bi bi-journal-plus" style="line-height: 1;"></i> Create Sale
                     </a>
                 </li>
-            </ul>
+            </ul> --}}
         @endcan
         <ul class="c-sidebar-nav-dropdown-items">
             <li class="c-sidebar-nav-item">
@@ -311,6 +312,15 @@
                     </a>
                 </li>
             </ul>
+        @endcan
+        @can('access_gold_price')
+        <ul class="c-sidebar-nav-dropdown-items">
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link {{ request()->routeIs('gold-price*') ? 'c-active' : '' }}" href="{{ route('gold-price.index') }}">
+                    <i class="c-sidebar-nav-icon bi bi-currency-exchange" style="line-height: 1;"></i> Gold Price
+                </a>
+            </li>
+        </ul>
         @endcan
         @can('access_currencies')
         <ul class="c-sidebar-nav-dropdown-items">

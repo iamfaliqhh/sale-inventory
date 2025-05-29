@@ -20,4 +20,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::patch('/settings', 'SettingController@update')->name('settings.update');
     // Units
     Route::resource('units', 'UnitsController')->except('show');
+
+    Route::resource('gold-price', 'GoldPriceController')->only(['index', 'create', 'store']);
 });

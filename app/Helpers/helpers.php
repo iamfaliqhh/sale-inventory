@@ -60,3 +60,17 @@ if (!function_exists('array_merge_numeric_values')) {
         return $merged;
     }
 }
+
+use Modules\Setting\Entities\GoldPrice;
+
+if (!function_exists('current_gold_price')) {
+    function current_gold_price($type = 'sale')
+    {
+        // $type: 'sale' or 'buyback'
+        $price = GoldPrice::where('type', $type)
+            ->orderByDesc('date')
+            ->orderByDesc('id')
+            ->first();
+        return $price ? $price->price : 0;
+    }
+}

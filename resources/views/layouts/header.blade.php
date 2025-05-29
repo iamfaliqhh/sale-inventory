@@ -10,11 +10,26 @@
 
 </ul>
 <ul class="c-header-nav ml-auto mr-4">
-    @can('create_pos_sales')
-    <li class="c-header-nav-item mr-3">
-        <a class="btn btn-primary btn-pill {{ request()->routeIs('app.pos.index') ? 'disabled' : '' }}" href="{{ route('app.pos.index') }}">
-            <i class="bi bi-cart mr-1"></i> POS System
+
+    @can('access_gold_prices')
+    <li class="c-header-nav-item">
+        <a class="btn btn-warning btn-pill m-1" href="{{ route('gold-price.index') }}" role="button">
+            <i class="bi bi-currency-exchange mr-1"></i> Gold Price
         </a>
+    </li>
+    @endcan
+
+    @can('create_pos_sales')
+    <li class="c-header-nav-item">
+        <div class="dropdown m-1">
+            <button class="btn btn-primary btn-pill dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-cart mr-1"></i> POS System
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item {{ request()->routeIs('app.pos.index') && !request()->has('tradein') ? 'disabled' : '' }}" href="{{ route('app.pos.index') }}">Transaction</a></li>
+                <li><a class="dropdown-item {{ request()->routeIs('app.pos.index') && request()->has('tradein') ? 'disabled' : '' }}" href="{{ route('app.pos.index', ['tradein']) }}">Trade-In</a></li>
+            </ul>
+        </div>
     </li>
     @endcan
 

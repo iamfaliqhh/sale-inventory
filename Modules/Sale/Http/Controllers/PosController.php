@@ -26,6 +26,24 @@ class PosController extends Controller
 
         return view('sale::pos.index', compact('product_categories', 'customers'));
     }
+    
+    public function buyBack() {
+        Cart::instance('sale')->destroy();
+
+        $customers = Customer::all();
+        $product_categories = Category::all();
+
+        return view('sale::buy-back.index', compact('product_categories', 'customers'));
+    }
+
+    public function tradeIn() {
+        Cart::instance('sale')->destroy();
+
+        $customers = Customer::all();
+        $product_categories = Category::all();
+
+        return view('sale::trade-in.index', compact('product_categories', 'customers'));
+    }
 
 
     public function store(StorePosSaleRequest $request) {
@@ -45,18 +63,16 @@ class PosController extends Controller
                 'reference' => 'PSL',
                 'customer_id' => $request->customer_id,
                 'customer_name' => Customer::findOrFail($request->customer_id)->customer_name,
-                'tax_percentage' => $request->tax_percentage,
-                'discount_percentage' => $request->discount_percentage,
+                'discount_amount' => $request->discount_amount * 100,
                 'shipping_amount' => $request->shipping_amount * 100,
                 'paid_amount' => $request->paid_amount * 100,
                 'total_amount' => $request->total_amount * 100,
                 'due_amount' => $due_amount * 100,
                 'status' => 'Completed',
+                'type' => $request->type,
                 'payment_status' => $payment_status,
                 'payment_method' => $request->payment_method,
                 'note' => $request->note,
-                'tax_amount' => Cart::instance('sale')->tax() * 100,
-                'discount_amount' => Cart::instance('sale')->discount() * 100,
             ]);
 
             foreach (Cart::instance('sale')->content() as $cart_item) {
