@@ -17,12 +17,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/app/pos', 'PosController@index')->name('app.pos.index');
     Route::post('/app/pos', 'PosController@store')->name('app.pos.store');
 
-    Route::get('/app/pos/buyback', 'PosController@buyBack')->name('app.pos.buyback');
-    Route::post('/app/pos/buyback', 'PosController@storeBuyBack')->name('app.pos.buyback.store');
-
-    Route::get('/app/pos/tradein', 'PosController@tradeIn')->name('app.pos.tradein');
-    Route::post('/app/pos/tradein', 'PosController@storeTradeIn')->name('app.pos.tradein.store');
-
     //Generate PDF
     Route::get('/sales/pdf/{id}', function ($id) {
         $sale = \Modules\Sale\Entities\Sale::findOrFail($id);

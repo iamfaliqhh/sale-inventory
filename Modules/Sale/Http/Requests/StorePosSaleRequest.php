@@ -20,6 +20,7 @@ class StorePosSaleRequest extends FormRequest
             'shipping_amount' => 'required|numeric',
             'total_amount' => 'required|numeric',
             'paid_amount' => 'required|numeric',
+            'type' => 'required|in:Normal,Trade In',
             'note' => 'nullable|string|max:1000'
         ];
     }

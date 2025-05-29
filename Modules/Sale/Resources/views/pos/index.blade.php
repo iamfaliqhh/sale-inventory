@@ -64,6 +64,11 @@
                     $('#paid_amount').val(paid_amount);
                     var total_amount = $('#total_amount').maskMoney('unmasked')[0];
                     $('#total_amount').val(total_amount);
+                    if (window.location.search.includes('tradein')) {
+                        $('#type').val('Trade In');
+                    } else {
+                        $('#type').val('Normal');
+                    }
                 });
             });
         });

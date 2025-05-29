@@ -11,6 +11,7 @@
             </div>
             <form id="checkout-form" action="{{ route('app.pos.store') }}" method="POST">
                 @csrf
+                <input type="hidden" name="type" id="type" value="">
                 <div class="modal-body">
                     @if (session()->has('checkout_message'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">

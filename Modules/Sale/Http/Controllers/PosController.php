@@ -69,6 +69,7 @@ class PosController extends Controller
                 'total_amount' => $request->total_amount * 100,
                 'due_amount' => $due_amount * 100,
                 'status' => 'Completed',
+                'type' => $request->type,
                 'payment_status' => $payment_status,
                 'payment_method' => $request->payment_method,
                 'note' => $request->note,
