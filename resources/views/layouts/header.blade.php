@@ -26,8 +26,20 @@
                 <i class="bi bi-cart mr-1"></i> POS System
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item {{ request()->routeIs('app.pos.index') && !request()->has('tradein') ? 'disabled' : '' }}" href="{{ route('app.pos.index') }}">Transaction</a></li>
-                <li><a class="dropdown-item {{ request()->routeIs('app.pos.index') && request()->has('tradein') ? 'disabled' : '' }}" href="{{ route('app.pos.index', ['tradein']) }}">Trade-In</a></li>
+                <li>
+                    <a class="dropdown-item {{ request()->routeIs('app.pos.index') && !request()->has('tradein') ? 'disabled' : '' }}" href="{{ route('app.pos.index') }}">
+                        <i class="bi bi-cash mr-1"></i>Transaction
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item {{ request()->routeIs('app.pos.buyback') ? 'disabled' : '' }}" href="{{ route('app.pos.buyback') }}">
+                        <i class="bi bi-arrow-counterclockwise mr-1"></i> Buyback
+                    </a>
+                <li>
+                    <a class="dropdown-item {{ request()->routeIs('app.pos.index') && request()->has('tradein') ? 'disabled' : '' }}" href="{{ route('app.pos.index', ['tradein']) }}">
+                        <i class="bi bi-arrow-left-right mr-1"></i> Trade-In
+                    </a>
+                </li>
             </ul>
         </div>
     </li>

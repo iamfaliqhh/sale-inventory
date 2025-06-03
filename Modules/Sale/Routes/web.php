@@ -16,6 +16,7 @@ Route::group(['middleware' => 'auth'], function () {
     //POS
     Route::get('/app/pos', 'PosController@index')->name('app.pos.index');
     Route::post('/app/pos', 'PosController@store')->name('app.pos.store');
+    Route::get('/app/pos/buyback', 'PosController@buyback')->name('app.pos.buyback');
 
     //Generate PDF
     Route::get('/sales/pdf/{id}', function ($id) {
