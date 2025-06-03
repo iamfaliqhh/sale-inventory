@@ -9,7 +9,7 @@ class GoldPriceController extends Controller
 {
     public function index()
     {
-        $prices = GoldPrice::orderByDesc('date')->orderByDesc('id')->get();
+        $prices = GoldPrice::orderByDesc('created_at')->orderByDesc('id')->get();
         return view('setting::gold_price.index', compact('prices'));
     }
 
@@ -20,13 +20,13 @@ class GoldPriceController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'date'  => 'required|date',
-            'type'  => 'required|in:sale,buyback',
-            'price' => 'required|numeric|min:0',
-            'note'  => 'nullable|string|max:255',
+        $data = $request->validate([
+            'transaction_price' => 'required|numeric|min:0',
+            'trade_in_price'    => 'required|numeric|min:0',
+            'buyback_price'     => 'required|numeric|min:0',
         ]);
-        GoldPrice::create($request->only('date', 'type', 'price', 'note'));
+        
+        GoldPrice::create($data);
         toast('Gold Price Saved!', 'success');
         return redirect()->route('gold-price.index');
     }

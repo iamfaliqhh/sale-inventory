@@ -29,19 +29,19 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
+                                        <th>Transaction Price</th>
+                                        <th>Trade-In Price</th>
+                                        <th>Buyback Price</th>
                                         <th>Date</th>
-                                        <th>Type</th>
-                                        <th>Price</th>
-                                        <th>Note</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($prices as $price)
                                         <tr>
-                                            <td>{{ $price->date }}</td>
-                                            <td>{{ ucfirst($price->type) }}</td>
-                                            <td>{{ format_currency($price->price) }}</td>
-                                            <td>{{ $price->note }}</td>
+                                            <td>{{ format_currency($price->transaction_price) }}</td>
+                                            <td>{{ format_currency($price->trade_in_price) }}</td>
+                                            <td>{{ format_currency($price->buyback_price) }}</td>
+                                            <td>{{ $price->created_at->format('d M Y H:i') }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

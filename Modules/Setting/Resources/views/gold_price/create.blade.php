@@ -24,36 +24,32 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="form-row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="date">Date <span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control" name="date" id="date" required value="{{ old('date', date('Y-m-d')) }}">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="type">Type <span class="text-danger">*</span></label>
-                                        <select class="form-control" name="type" id="type" required>
-                                            <option value="sale" {{ old('type') == 'sale' ? 'selected' : '' }}>Sale</option>
-                                            <option value="buyback" {{ old('type') == 'buyback' ? 'selected' : '' }}>Buyback</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="price">Price per Gram <span class="text-danger">*</span></label>
-                                        <input type="number" step="0.01" min="0" class="form-control" name="price" id="price" required value="{{ old('price') }}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="note">Note</label>
-                                        <input type="text" class="form-control" name="note" id="note" value="{{ old('note') }}">
-                                    </div>
-                                </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Transaction Price</th>
+                                            <th>Trade-In Price</th>
+                                            <th>Buyback Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <input type="number" name="transaction_price" class="form-control" value="{{ old('transaction_price') }}" required>
+                                                @error('transaction_price') <div class="text-danger">{{ $message }}</div> @enderror
+                                            </td>
+                                            <td>
+                                                <input type="number" name="trade_in_price" class="form-control" value="{{ old('trade_in_price') }}" required>
+                                                @error('trade_in_price') <div class="text-danger">{{ $message }}</div> @enderror
+                                            </td>
+                                            <td>
+                                                <input type="number" name="buyback_price" class="form-control" value="{{ old('buyback_price') }}" required>
+                                                @error('buyback_price') <div class="text-danger">{{ $message }}</div> @enderror
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

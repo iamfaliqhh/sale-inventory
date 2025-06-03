@@ -15,10 +15,10 @@ class CreateGoldPriceTable extends Migration
     {
         Schema::create('gold_prices', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
-            $table->enum('type', ['sale', 'buyback']);
-            $table->decimal('price', 15, 2);
-            $table->string('note')->nullable();
+            $table->decimal('transaction_price', 15, 2);
+            $table->decimal('trade_in_price', 15, 2);
+            $table->decimal('buyback_price', 15, 2);
+            $table->timestamps();
         });
     }
 
@@ -29,6 +29,6 @@ class CreateGoldPriceTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('gold_price');
+        Schema::dropIfExists('gold_prices');
     }
 }

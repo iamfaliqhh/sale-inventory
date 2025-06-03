@@ -6,11 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 class GoldPrice extends Model
 {
     protected $fillable = [
-        'date',      // date of the price
-        'type',      // 'sale' or 'buyback'
-        'price',     // price per gram
-        'note',      // optional
+        'transaction_price',
+        'trade_in_price',
+        'buyback_price',
     ];
-
-    public $timestamps = false;
 }
