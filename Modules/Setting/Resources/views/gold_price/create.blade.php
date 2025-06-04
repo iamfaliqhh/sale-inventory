@@ -36,15 +36,15 @@
                                     <tbody>
                                         <tr>
                                             <td>
-                                                <input type="number" name="transaction_price" class="form-control" value="{{ old('transaction_price') }}" required>
+                                                <input type="text" name="transaction_price" class="form-control" value="{{ old('transaction_price') }}" required>
                                                 @error('transaction_price') <div class="text-danger">{{ $message }}</div> @enderror
                                             </td>
                                             <td>
-                                                <input type="number" name="trade_in_price" class="form-control" value="{{ old('trade_in_price') }}" required>
+                                                <input type="text" name="trade_in_price" class="form-control" value="{{ old('trade_in_price') }}" required>
                                                 @error('trade_in_price') <div class="text-danger">{{ $message }}</div> @enderror
                                             </td>
                                             <td>
-                                                <input type="number" name="buyback_price" class="form-control" value="{{ old('buyback_price') }}" required>
+                                                <input type="text" name="buyback_price" class="form-control" value="{{ old('buyback_price') }}" required>
                                                 @error('buyback_price') <div class="text-danger">{{ $message }}</div> @enderror
                                             </td>
                                         </tr>
@@ -60,19 +60,22 @@
 @endsection
 
 @push('page_scripts')
+
     <script src="{{ asset('js/jquery-mask-money.js') }}"></script>
     <script>
         $(document).ready(function () {
-            $('#price').maskMoney({
-                prefix:'{{ settings()->currency->symbol }}',
-                thousands:'{{ settings()->currency->thousand_separator }}',
-                decimal:'{{ settings()->currency->decimal_separator }}',
+            $('input[name="transaction_price"], input[name="trade_in_price"], input[name="buyback_price"]').maskMoney({
+                prefix: '{{ settings()->currency->symbol }}',
+                thousands: '{{ settings()->currency->thousand_separator }}',
+                decimal: '{{ settings()->currency->decimal_separator }}',
                 allowZero: true,
             });
 
             $('#gold-price-form').submit(function () {
-                var price = $('#price').maskMoney('unmasked')[0];
-                $('#price').val(price);
+                $('input[name="transaction_price"], input[name="trade_in_price"], input[name="buyback_price"]').each(function () {
+                    var unmaskedValue = $(this).maskMoney('unmasked')[0];
+                    $(this).val(unmaskedValue);
+                });
             });
         });
     </script>

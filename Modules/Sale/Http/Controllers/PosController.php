@@ -26,14 +26,14 @@ class PosController extends Controller
 
         return view('sale::pos.index', compact('product_categories', 'customers'));
     }
-    
+
     public function buyBack() {
-        Cart::instance('sale')->destroy();
+        // Cart::instance('sale')->destroy();
 
-        $customers = Customer::all();
-        $product_categories = Category::all();
+        // $customers = Customer::all();
+        // $product_categories = Category::all();
 
-        return view('sale::buy-back.index', compact('product_categories', 'customers'));
+        // return view('sale::buy-back.index', compact('product_categories', 'customers'));
     }
 
     public function tradeIn() {

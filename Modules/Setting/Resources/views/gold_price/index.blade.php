@@ -20,7 +20,7 @@
                 <div class="card">
                     <div class="card-body">
                         <a href="{{ route('gold-price.create') }}" class="btn btn-primary">
-                            Add Gold Price <i class="bi bi-plus"></i>
+                            Update Gold Price <i class="bi bi-plus"></i>
                         </a>
 
                         <hr>
