@@ -6,11 +6,16 @@ use Modules\Product\DataTables\ProductDataTable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Modules\People\Entities\Customer;
 use Modules\Product\Entities\Product;
 use Modules\Product\Http\Requests\StoreProductRequest;
 use Modules\Product\Http\Requests\UpdateProductRequest;
+use Modules\Sale\Entities\Sale;
+use Modules\Sale\Entities\SaleDetails;
+use Modules\Sale\Entities\SalePayment;
 use Modules\Upload\Entities\Upload;
 
 class ProductController extends Controller
@@ -35,24 +40,90 @@ class ProductController extends Controller
 
     public function create() {
         abort_if(Gate::denies('create_products'), 403);
-        $type = request()->has('buyback') ? 'Buy Back' : 'Normal';
+
+        $type = "Normal";
+        $gold_price = current_gold_price('transaction');
+        if(request()->has('buyback')) {
+            $type = "Buy Back";
+            $gold_price = current_gold_price('buyback');
+        }
         
-        return view('product::products.create', compact('type'));
+        return view('product::products.create', compact('type', 'gold_price'));
     }
 
 
     public function store(StoreProductRequest $request) {
-        $product = Product::create($request->except('document'));
+        $view = 'products.index';
+        $message = 'Product Created!';
 
-        if ($request->has('document')) {
-            foreach ($request->input('document', []) as $file) {
-                $product->addMedia(Storage::path('temp/dropzone/' . $file))->toMediaCollection('images');
+        try {
+            DB::beginTransaction();
+            $product = Product::create($request->except('document'));
+
+            if($product && $request->product_type == "Buy Back") {
+                $this->createBuyBackSales($product);
+                $view = 'sales.index';
+                $message = 'Buy Back Product Created!';
             }
+
+            if ($request->has('document')) {
+                foreach ($request->input('document', []) as $file) {
+                    $product->addMedia(Storage::path('temp/dropzone/' . $file))->toMediaCollection('images');
+                }
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            toast('Error: ' . $e->getMessage(), 'error');
+
+            return redirect()->back()->withInput();
         }
 
-        toast('Product Created!', 'success');
+        toast($message, 'success');
+        return redirect()->route($view);
+    }
 
-        return redirect()->route('products.index');
+
+    private function createBuyBackSales(Product $product) {
+        $sale = Sale::create([
+            'date' => now(),
+            'customer_id' => $product->customer_id,
+            'customer_name' => Customer::findOrFail($product->customer_id)->customer_name,
+            'tax_percentage' => 0,
+            'discount_percentage' => 0,
+            'shipping_amount' => 0 * 100,
+            'paid_amount' => $product->product_weight * current_gold_price('buyback') * 100,
+            'total_amount' => $product->product_weight * current_gold_price('buyback') * 100,
+            'due_amount' => 0 * 100,
+            'status' => 'Completed',
+            'type' => 'Buy Back',
+            'payment_status' => 'Paid',
+            'payment_method' => 'Cash',
+            'note' => $product->product_note ?? '',
+        ]);
+
+        SaleDetails::create([
+            'sale_id' => $sale->id,
+            'product_id' => $product->id,
+            'product_name' => $product->product_name,
+            'product_code' => $product->product_code,
+            'quantity' => 1, // Assuming one product per buyback sale
+            'price' => $product->product_weight * current_gold_price('buyback') * 100,
+            'unit_price' => $product->product_weight * current_gold_price('buyback') * 100,
+            'sub_total' => $product->product_weight * current_gold_price('buyback') * 100,
+            'product_discount_amount' => 0 * 100,
+            'product_discount_type' => 'fixed',
+            'product_tax_amount' => 0 * 100,
+        ]);
+        SalePayment::create([
+            'date' => now(),
+            'reference' => 'BUYBACK/' . $product->product_code,
+            'amount' => $product->product_weight * current_gold_price('buyback'),
+            'sale_id' => $sale->id,
+            'payment_method' => 'Cash',
+        ]);
     }
 
 
@@ -66,7 +137,12 @@ class ProductController extends Controller
     public function edit(Product $product) {
         abort_if(Gate::denies('edit_products'), 403);
 
-        return view('product::products.edit', compact('product'));
+        $gold_price = current_gold_price('transaction');
+        if($product->product_type == "Buy Back") {
+            $gold_price = current_gold_price('buyback');
+        }
+
+        return view('product::products.edit', compact('product', 'gold_price'));
     }
 
 

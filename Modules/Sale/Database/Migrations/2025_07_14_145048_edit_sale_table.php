@@ -15,6 +15,7 @@ class EditSaleTable extends Migration
     {
         Schema::table('sales', function (Blueprint $table) {
             $table->string('type')->default('Normal')->after('status');
+            $table->integer('wage_amount')->default(0)->after('shipping_amount');
         });
     }
 
