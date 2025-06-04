@@ -24,7 +24,7 @@ class EditProductsTable extends Migration
             $table->foreign('customer_id')->references('id')->on('customers')->restrictOnDelete();
         });
     }
-
+    //wlee
     /**
      * Reverse the migrations.
      *
