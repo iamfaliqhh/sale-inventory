@@ -14,6 +14,7 @@ class ProductDataTable extends DataTable
 
     public function dataTable($query)
     {
+        $price = $this->type == "Buy Back" ? 'buyback' : 'transaction';
         return datatables()
             ->eloquent($query)->with('category')
             ->addColumn('action', function ($data) {
@@ -23,21 +24,21 @@ class ProductDataTable extends DataTable
                 $url = $data->getFirstMediaUrl('images', 'thumb');
                 return '<img src="'.$url.'" border="0" width="50" class="img-thumbnail" align="center"/>';
             })
-            ->addColumn('product_price', function ($data) {
-                return format_currency($data->product_price);
-            })
-            ->addColumn('product_cost', function ($data) {
-                return format_currency($data->product_cost);
+            ->addColumn('product_price', function ($data) use ($price) {
+                return format_currency($data->product_weight * current_gold_price($price));
             })
             ->addColumn('product_quantity', function ($data) {
                 return $data->product_quantity . ' ' . $data->product_unit;
+            })
+            ->addColumn('product_weight', function ($data) {
+                return $data->product_weight . ' g';
             })
             ->rawColumns(['product_image']);
     }
 
     public function query(Product $model)
     {
-        return $model->newQuery()->with('category');
+        return $model->where('product_type', $this->type)->newQuery()->with('category');
     }
 
     public function html()
@@ -81,10 +82,6 @@ class ProductDataTable extends DataTable
                 ->title('Name')
                 ->className('text-center align-middle'),
 
-            Column::computed('product_cost')
-                ->title('Cost')
-                ->className('text-center align-middle'),
-
             Column::computed('product_price')
                 ->title('Price')
                 ->className('text-center align-middle'),
@@ -93,8 +90,8 @@ class ProductDataTable extends DataTable
                 ->title('Quantity')
                 ->className('text-center align-middle'),
 
-            Column::computed('product_type')
-                ->title('Type')
+            Column::computed('product_weight')
+                ->title('Weight')
                 ->className('text-center align-middle'),
 
             Column::computed('action')

@@ -64,13 +64,20 @@ if (!function_exists('array_merge_numeric_values')) {
 use Modules\Setting\Entities\GoldPrice;
 
 if (!function_exists('current_gold_price')) {
-    function current_gold_price()
+    function current_gold_price($type = 'transaction')
     {
         $price = GoldPrice::latest()->first() ?? false;
-        return $price ? $price->toArray() : [
-            'transaction_price' => 0,
-            'trade_in_price' => 0,
-            'buyback_price' => 0,
-        ];
+        if (!$price) {
+            return 0;
+        }
+        if ($type == 'transaction') {
+            return $price->transaction_price;
+        } elseif ($type == 'trade_in') {
+            return $price->trade_in_price;
+        } elseif ($type == 'buyback') {
+            return $price->buyback_price;
+        } else {
+            return 0;
+        }
     }
 }

@@ -1,13 +1,21 @@
 @extends('layouts.app')
 
-@section('title', 'Create Product')
+@section('title', ($type == "Buy Back" ? 'Create Buy Back' : 'Create Product'))
 
 @section('breadcrumb')
+    @if($type == "Buy Back")
+        <ol class="breadcrumb border-0 m-0">
+            <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('app.pos.index') }}">POS</a></li>
+            <li class="breadcrumb-item active">Buy Back</li>
+        </ol>
+    @else
     <ol class="breadcrumb border-0 m-0">
         <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
         <li class="breadcrumb-item"><a href="{{ route('products.index') }}">Products</a></li>
         <li class="breadcrumb-item active">Add</li>
     </ol>
+    @endif
 @endsection
 
 @section('content')
@@ -18,7 +26,9 @@
                 <div class="col-lg-12">
                     @include('utils.alerts')
                     <div class="form-group">
-                        <button class="btn btn-primary">Create Product <i class="bi bi-check"></i></button>
+                        <button class="btn btn-primary">
+                            {{ $type == "Buy Back" ? "Create Transaction" : "Create Product" }}
+                            <i class="bi bi-check"></i></button>
                     </div>
                 </div>
                 <div class="col-lg-12">
@@ -27,7 +37,7 @@
                             <div class="form-row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="product_name">Product Name <span class="text-danger">*</span></label>
+                                        <label for="product_name">{{ $type == "Buy Back" ? "Scrap Description / Name" : "Product Name" }} <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="product_name" required value="{{ old('product_name') }}">
                                     </div>
                                 </div>
@@ -58,19 +68,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="form-row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="product_cost">Cost <span class="text-danger">*</span></label>
-                                        <input id="product_cost" type="text" class="form-control" name="product_cost" required value="{{ old('product_cost') }}">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="product_price">Price <span class="text-danger">*</span></label>
-                                        <input id="product_price" type="text" class="form-control" name="product_price" required value="{{ old('product_price') }}">
+                                        <label for="product_weight">Weight (in grams) <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" name="product_weight" required value="{{ old('product_weight') }}" min="0" step="0.01">
                                     </div>
                                 </div>
                             </div>
@@ -93,18 +94,29 @@
                             <div class="form-row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="product_order_tax">Tax (%)</label>
-                                        <input type="number" class="form-control" name="product_order_tax" value="{{ old('product_order_tax') }}" min="1">
+                                        @if($type == "Buy Back")
+                                            <label for="customer">Customer</label>
+                                            <select class="form-control" name="customer_id" id="customer_id">
+                                                <option value="" selected >Select Customer</option>
+                                                @foreach(\Modules\People\Entities\Customer::all() as $customer)
+                                                    <option value="{{ $customer->id }}">{{ $customer->customer_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        @else
+                                            <label for="supplier_id">Supplier</label>
+                                            <select class="form-control" name="supplier_id" id="supplier_id">
+                                                <option value="" selected >Select Supplier</option>
+                                                @foreach(\Modules\People\Entities\Supplier::all() as $supplier)
+                                                    <option value="{{ $supplier->id }}">{{ $supplier->supplier_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="product_type">Product Type</label>
-                                        <select class="form-control" name="product_type" id="product_type">
-                                            <option value="" selected >Select Product Type</option>
-                                            <option value="Normal">Normal</option>
-                                            <option value="Buy Back">Buy Back</option>
-                                        </select>
+                                        <label for="product_type">Type</label>
+                                        <input readonly type="text" class="form-control" name="product_type" value="{{ $type }}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -206,25 +218,25 @@
 
     <script src="{{ asset('js/jquery-mask-money.js') }}"></script>
     <script>
-        $(document).ready(function () {
-            $('#product_cost').maskMoney({
-                prefix:'{{ settings()->currency->symbol }}',
-                thousands:'{{ settings()->currency->thousand_separator }}',
-                decimal:'{{ settings()->currency->decimal_separator }}',
-            });
-            $('#product_price').maskMoney({
-                prefix:'{{ settings()->currency->symbol }}',
-                thousands:'{{ settings()->currency->thousand_separator }}',
-                decimal:'{{ settings()->currency->decimal_separator }}',
-            });
+        // $(document).ready(function () {
+        //     $('#product_cost').maskMoney({
+        //         prefix:'{{ settings()->currency->symbol }}',
+        //         thousands:'{{ settings()->currency->thousand_separator }}',
+        //         decimal:'{{ settings()->currency->decimal_separator }}',
+        //     });
+        //     $('#product_price').maskMoney({
+        //         prefix:'{{ settings()->currency->symbol }}',
+        //         thousands:'{{ settings()->currency->thousand_separator }}',
+        //         decimal:'{{ settings()->currency->decimal_separator }}',
+        //     });
 
-            $('#product-form').submit(function () {
-                var product_cost = $('#product_cost').maskMoney('unmasked')[0];
-                var product_price = $('#product_price').maskMoney('unmasked')[0];
-                $('#product_cost').val(product_cost);
-                $('#product_price').val(product_price);
-            });
-        });
+        //     $('#product-form').submit(function () {
+        //         var product_cost = $('#product_cost').maskMoney('unmasked')[0];
+        //         var product_price = $('#product_price').maskMoney('unmasked')[0];
+        //         $('#product_cost').val(product_cost);
+        //         $('#product_price').val(product_price);
+        //     });
+        // });
     </script>
 @endpush
 

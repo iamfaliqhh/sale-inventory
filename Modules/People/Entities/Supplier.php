@@ -14,4 +14,8 @@ class Supplier extends Model
     protected static function newFactory() {
         return \Modules\People\Database\factories\SupplierFactory::new();
     }
+
+    public function products() {
+        return $this->hasMany(\Modules\Product\Entities\Product::class, 'supplier_id', 'id');
+    }
 }

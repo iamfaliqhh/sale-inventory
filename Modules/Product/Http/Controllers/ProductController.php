@@ -19,14 +19,25 @@ class ProductController extends Controller
     public function index(ProductDataTable $dataTable) {
         abort_if(Gate::denies('access_products'), 403);
 
-        return $dataTable->render('product::products.index');
+        return $dataTable
+        ->with('type', "Normal")
+        ->render('product::products.index');
+    }
+
+    public function buyback(ProductDataTable $dataTable) {
+        abort_if(Gate::denies('access_products'), 403);
+
+        return $dataTable
+        ->with('type', "Buy Back")
+        ->render('product::products.index');
     }
 
 
     public function create() {
         abort_if(Gate::denies('create_products'), 403);
-
-        return view('product::products.create');
+        $type = request()->has('buyback') ? 'Buy Back' : 'Normal';
+        
+        return view('product::products.create', compact('type'));
     }
 
 

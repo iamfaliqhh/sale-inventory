@@ -22,6 +22,10 @@ class Product extends Model implements HasMedia
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
+    public function supplier() {
+        return $this->belongsTo(Supplier::class, 'supplier_id', 'id');
+    }
+
     public function registerMediaCollections(): void {
         $this->addMediaCollection('images')
             ->useFallbackUrl('/images/fallback_product_image.png');

@@ -19,7 +19,7 @@
         @endcan
         @can('create_products')
         <li class="c-sidebar-nav-item">
-            <a class="c-sidebar-nav-link {{ request()->routeIs('products.create') ? 'c-active' : '' }}" href="{{ route('products.create') }}">
+            <a class="c-sidebar-nav-link" {{ (request()->routeIs('products.create') && !request()->has('buyback')) ? 'c-active' : '' }}" href="{{ route('products.create') }}">
                 <i class="c-sidebar-nav-icon bi bi-journal-plus" style="line-height: 1;"></i> Create Product
             </a>
         </li>
@@ -27,6 +27,11 @@
         <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link {{ request()->routeIs('products.index') ? 'c-active' : '' }}" href="{{ route('products.index') }}">
                 <i class="c-sidebar-nav-icon bi bi-journals" style="line-height: 1;"></i> All Products
+            </a>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link {{ request()->routeIs('products.buyback') ? 'c-active' : '' }}" href="{{ route('products.buyback') }}">
+                <i class="c-sidebar-nav-icon bi bi-arrow-counterclockwise" style="line-height: 1;"></i> All Buyback Products
             </a>
         </li>
         @can('print_barcodes')

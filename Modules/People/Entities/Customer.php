@@ -16,4 +16,8 @@ class Customer extends Model
         return \Modules\People\Database\factories\CustomerFactory::new();
     }
 
+    public function products() {
+        return $this->hasMany(\Modules\Product\Entities\Product::class, 'supplier_id', 'id');
+    }
+
 }

@@ -32,7 +32,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item {{ request()->routeIs('app.pos.buyback') ? 'disabled' : '' }}" href="{{ route('app.pos.buyback') }}">
+                    <a class="dropdown-item {{ request()->routeIs('products.create') && request()->has('buyback') ? 'disabled' : '' }}" href="{{ route('products.create', ['buyback']) }}">
                         <i class="bi bi-arrow-counterclockwise mr-1"></i> Buyback
                     </a>
                 <li>
