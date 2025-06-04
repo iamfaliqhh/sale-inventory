@@ -29,6 +29,7 @@ class ProductList extends Component
     }
 
     public function render() {
+        $gold_price = $this->product_type === 'Buy Back' ? current_gold_price('trade_in') : current_gold_price('transaction');
         return view('livewire.pos.product-list', [
             'products' => Product::when($this->product_type, function ($query) {
                 return $query->where('product_type', $this->product_type);
@@ -37,6 +38,11 @@ class ProductList extends Component
                 return $query->where('category_id', $this->category_id);
             })
             ->paginate($this->limit)
+            ->through(function ($product) use ($gold_price) {
+                $product->product_price = $product->product_weight * $gold_price;
+                return $product;
+            }),
+            'gold_price' => $gold_price
         ]);
     }
 

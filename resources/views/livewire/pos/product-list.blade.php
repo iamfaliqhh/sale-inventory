@@ -9,7 +9,7 @@
                     </div>
                 </div>
                 @forelse($products as $product)
-                    <div wire:click.prevent="selectProduct({{ $product }})" class="col-lg-4 col-md-6 col-xl-3" style="cursor: pointer;">
+                    <div wire:click.prevent="selectProduct({{ $product }})" class="col-lg-4 col-md-6 col-xl-3 mb-4" style="cursor: pointer;">
                         <div class="card border-0 shadow h-100">
                             <div class="position-relative">
                                 <img height="200" src="{{ $product->getFirstMediaUrl('images') }}" class="card-img-top" alt="Product Image">
@@ -22,7 +22,12 @@
                                     {{ $product->product_code }}
                                 </span>
                                 </div>
-                                <p class="card-text font-weight-bold">{{ format_currency($product->product_price) }}</p>
+                                <p class="card-text font-weight-bold">
+                                    {{ format_currency($product->product_price) }}
+                                    <span class="text-muted text-nowrap" style="font-size:12px;">
+                                        ({{$product->product_weight."g x ".format_currency($gold_price)}})
+                                    </span>
+                                </p>
                             </div>
                         </div>
                     </div>

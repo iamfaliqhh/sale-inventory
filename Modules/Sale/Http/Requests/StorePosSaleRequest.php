@@ -18,6 +18,7 @@ class StorePosSaleRequest extends FormRequest
             'customer_id' => 'required|numeric',
             'discount_amount' => 'required|numeric|min:0',
             'shipping_amount' => 'required|numeric',
+            'wage_amount' => 'required|numeric',
             'total_amount' => 'required|numeric',
             'paid_amount' => 'required|numeric',
             'type' => 'required|in:Normal,Trade In',

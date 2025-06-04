@@ -19,6 +19,8 @@ class UpdateProductRequest extends FormRequest
             'product_name' => ['required', 'string', 'max:255'],
             'product_code' => ['required', 'string', 'max:255', 'unique:products,product_code,' . $this->product->id],
             'product_unit' => ['required', 'string', 'max:255'],
+            'product_purity' => ['required', 'numeric', 'min:1', 'max:24'],
+            'product_weight' => ['required', 'numeric', 'min:0'],
             'product_quantity' => ['required', 'integer', 'min:1'],
             'product_stock_alert' => ['required', 'integer', 'min:0'],
             'product_order_tax' => ['nullable', 'integer', 'min:0', 'max:100'],

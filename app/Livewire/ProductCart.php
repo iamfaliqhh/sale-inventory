@@ -15,9 +15,12 @@ class ProductCart extends Component
     public $cart_instance;
     public $global_discount;
     public $shipping;
+    public $wage;
     public $quantity;
     public $check_quantity;
     public $data;
+    public $unit_price;
+    public $global_tax = 0; // This is commented out in the original code, but kept for reference
 
     private $product;
 
@@ -31,6 +34,7 @@ class ProductCart extends Component
             // $this->global_tax = $data->tax_percentage;
             $this->global_discount = $data->discount_amount;
             $this->shipping = $data->shipping_amount;
+            $this->wage = $data->wage_amount;
 
             $cart_items = Cart::instance($this->cart_instance)->content();
 
@@ -41,6 +45,7 @@ class ProductCart extends Component
             }
         } else {
             $this->global_discount = 0;
+            $this->wage = 0.00;
             // $this->global_tax = 0;
             $this->shipping = 0.00;
             $this->check_quantity = [];
@@ -76,8 +81,8 @@ class ProductCart extends Component
             'id'      => $product['id'],
             'name'    => $product['product_name'],
             'qty'     => 1,
+            'weight'  => $product['product_weight'],
             'price'   => $this->calculate($product)['price'],
-            'weight'  => 1,
             'options' => [
                 'product_discount'      => 0.00,
                 'sub_total'             => $this->calculate($product)['sub_total'],
@@ -85,7 +90,8 @@ class ProductCart extends Component
                 'stock'                 => $product['product_quantity'],
                 'unit'                  => $product['product_unit'],
                 'product_tax'           => $this->calculate($product)['product_tax'],
-                'unit_price'            => $this->calculate($product)['unit_price']
+                'unit_price'            => $this->calculate($product)['unit_price'],
+                'product_purity'        => $product['product_purity'],
             ]
         ]);
 
@@ -104,7 +110,7 @@ class ProductCart extends Component
 
     public function updatedGlobalDiscount() {
         // No percent, just set as amount
-        Cart::instance($this->cart_instance)->setGlobalDiscount((integer)$this->global_discount);
+        // Cart::instance($this->cart_instance)->setGlobalDiscount((integer)$this->global_discount);
     }
 
     public function updateQuantity($row_id, $product_id) {

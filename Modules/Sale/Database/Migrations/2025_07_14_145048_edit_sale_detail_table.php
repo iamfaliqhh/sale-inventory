@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class EditSaleTable extends Migration
+class EditSaleDetailTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class EditSaleTable extends Migration
      */
     public function up()
     {
-        Schema::table('sales', function (Blueprint $table) {
-            $table->string('type')->default('Normal')->after('status');
-            $table->integer('wage_amount')->default(0)->after('shipping_amount');
+        Schema::table('sale_details', function (Blueprint $table) {
+            $table->integer('weight')->after('quantity');
+            $table->integer('purity')->after('weight');
         });
     }
 
@@ -26,8 +26,8 @@ class EditSaleTable extends Migration
      */
     public function down()
     {
-        Schema::table('sales', function (Blueprint $table) {
-            $table->dropColumn('type');
+        Schema::table('sale_details', function (Blueprint $table) {
+            $table->dropColumn(['weight', 'purity']);
         });
     }
 }

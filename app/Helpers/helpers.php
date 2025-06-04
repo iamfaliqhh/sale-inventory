@@ -60,7 +60,7 @@ if (!function_exists('array_merge_numeric_values')) {
         return $merged;
     }
 }
-
+//wlee
 use Modules\Setting\Entities\GoldPrice;
 
 if (!function_exists('current_gold_price')) {

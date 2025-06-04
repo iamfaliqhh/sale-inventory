@@ -19,7 +19,10 @@
                         <div>
                             Reference: <strong>{{ $sale->reference }}</strong>
                         </div>
-                        <a target="_blank" class="btn btn-sm btn-secondary mfs-auto mfe-1 d-print-none" href="{{ route('sales.pdf', $sale->id) }}">
+                        <a class="btn btn-sm btn-secondary mfs-auto mfe-1 d-print-none"
+                        {{-- target="_blank" href="{{ route('sales.pdf', $sale->id) }}" --}}
+                        href="javascript:void(0);" onclick="window.print();"
+                        >
                             <i class="bi bi-printer"></i> Print
                         </a>
                         <a target="_blank" class="btn btn-sm btn-info mfe-1 d-print-none" href="{{ route('sales.pdf', $sale->id) }}">
@@ -59,16 +62,16 @@
                         </div>
 
                         <div class="table-responsive-sm">
-                            <table class="table table-striped">
+                            <table class="table table-bordered">
                                 <thead>
-                                <tr>
-                                    <th class="align-middle">Product</th>
-                                    <th class="align-middle">Net Unit Price</th>
-                                    <th class="align-middle">Quantity</th>
-                                    <th class="align-middle">Discount</th>
-                                    <th class="align-middle">Tax</th>
-                                    <th class="align-middle">Sub Total</th>
-                                </tr>
+                                    <tr>
+                                        <th class="align-middle">Product</th>
+                                        <th class="align-middle">Purity</th>
+                                        <th class="align-middle">Quantity</th>
+                                        <th class="align-middle">Weight</th>
+                                        <th class="align-middle">Price ({{settings()->currency->symbol}}/g)</th>
+                                        <th class="align-middle">Sub Total</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($sale->saleDetails as $item)
@@ -80,39 +83,62 @@
                                             </span>
                                         </td>
 
-                                        <td class="align-middle">{{ format_currency($item->unit_price) }}</td>
+
+                                        <td class="align-middle">
+                                            {{ $item->purity . ' Karat' }}
+                                        </td>
 
                                         <td class="align-middle">
                                             {{ $item->quantity }}
                                         </td>
 
                                         <td class="align-middle">
-                                            {{ format_currency($item->product_discount_amount) }}
+                                            {{ $item->weight . 'g' }}
                                         </td>
 
-                                        <td class="align-middle">
-                                            {{ format_currency($item->product_tax_amount) }}
-                                        </td>
+                                        <td class="align-middle">{{ format_currency($item->unit_price) }}</td>
 
                                         <td class="align-middle">
                                             {{ format_currency($item->sub_total) }}
                                         </td>
                                     </tr>
                                 @endforeach
+                                <tr>
+                                    <td colspan="3" class="text-right"><strong>Total Weight:</strong></td>
+                                    <td class="align-middle">{{ $sale->saleDetails->sum('weight') . 'g' }}</td>
+                                    <td colspan="2"></td>
+                                </tr>
+                                {{-- //discounnt wage shippih rggrand total --}}
+                                <tr>
+                                    <td colspan="5" class="text-right"><strong>Discount:</strong></td>
+                                    <td class="align-middle">{{ format_currency($sale->discount_amount) }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="text-right"><strong>Wage:</strong></td>
+                                    <td class="align-middle">{{ format_currency($sale->wage_amount) }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="text-right"><strong>Shipping:</strong></td>
+                                    <td class="align-middle">{{ format_currency($sale->shipping_amount) }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="text-right"><strong>Grand Total:</strong></td>
+                                    <td class="align-middle"><strong>{{ format_currency($sale->total_amount) }}</strong></td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-lg-4 col-sm-5 ml-md-auto">
                                 <table class="table">
                                     <tbody>
                                     <tr>
-                                        <td class="left"><strong>Discount ({{ $sale->discount_percentage }}%)</strong></td>
+                                        <td class="left"><strong>Discount</strong></td>
                                         <td class="right">{{ format_currency($sale->discount_amount) }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="left"><strong>Tax ({{ $sale->tax_percentage }}%)</strong></td>
-                                        <td class="right">{{ format_currency($sale->tax_amount) }}</td>
+                                        <td class="left"><strong>Wage</strong></td>
+                                        <td class="right">{{ format_currency($sale->wage_amount) }}</td>
                                     </tr>
                                     <tr>
                                         <td class="left"><strong>Shipping</strong></td>
@@ -125,7 +151,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

@@ -65,19 +65,29 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="product_weight">Weight (in grams) <span class="text-danger">*</span></label>
-                                        <input type="number" class="form-control" name="product_weight" required value="{{ $product->product_weight }}" min="0" step="0.01">
+                                        <input type="number" class="form-control" name="product_weight" id="product_weight" required value="{{ $product->product_weight }}" min="0" step="0.01">
+                                        {{-- <small id="calculated_price" class="mt-2 text-success font-weight-bold">Total Price: {{format_currency(0)}}</small> --}}
+                                        <small id="calculated_price" class="mt-2 text-success font-weight-bold">
+                                            Total Price: {{ settings()->currency->symbol . number_format($product->product_weight * $gold_price, 2) }}
+                                        </small>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="form-row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="product_purity">Purity (in Karat) <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" name="product_purity" required value="{{ $product->product_purity }}" min="1" max="24" step="0.01">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="product_quantity">Quantity <span class="text-danger">*</span></label>
                                         <input type="number" class="form-control" name="product_quantity" required value="{{ $product->product_quantity }}" min="1">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="product_stock_alert">Alert Quantity <span class="text-danger">*</span></label>
                                         <input type="number" class="form-control" name="product_stock_alert" required value="{{ $product->product_stock_alert }}" min="0">
@@ -197,6 +207,18 @@
                 @endif
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const weightInput = document.getElementById('product_weight');
+            const calculatedPriceDiv = document.getElementById('calculated_price');
+            const goldPrice = {{ $gold_price }}; // Replace 'transaction' with the appropriate type if needed
+
+            weightInput.addEventListener('input', function () {
+                const weight = parseFloat(weightInput.value) || 0; // Get the weight input value
+                const calculatedPrice = weight * goldPrice; // Calculate the price
+                calculatedPriceDiv.textContent = `Total Price: {{ settings()->currency->symbol }}${calculatedPrice.toFixed(2).toLocaleString()}`;
+            });
+        });
     </script>
 
     <script src="{{ asset('js/jquery-mask-money.js') }}"></script>

@@ -27,6 +27,14 @@
                                     <td>{{ $product->product_name }}</td>
                                 </tr>
                                 <tr>
+                                    <th>Supplier</th>
+                                    <td>{{ $product->supplier->supplier_name ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Customer</th>
+                                    <td>{{ $product->customer->customer_name ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
                                     <th>Category</th>
                                     <td>{{ $product->category->category_name }}</td>
                                 </tr>
@@ -42,18 +50,18 @@
                                     <th>Quantity</th>
                                     <td>{{ $product->product_quantity . ' ' . $product->product_unit }}</td>
                                 </tr>
-                                <tr>
+                                {{-- <tr>
                                     <th>Stock Worth</th>
                                     <td>
                                         COST:: {{ format_currency($product->product_cost * $product->product_quantity) }} /
                                         PRICE:: {{ format_currency($product->product_price * $product->product_quantity) }}
                                     </td>
-                                </tr>
+                                </tr> --}}
                                 <tr>
                                     <th>Alert Quantity</th>
                                     <td>{{ $product->product_stock_alert }}</td>
                                 </tr>
-                                <tr>
+                                {{-- <tr>
                                     <th>Tax (%)</th>
                                     <td>{{ $product->product_order_tax ?? 'N/A' }}</td>
                                 </tr>
@@ -68,6 +76,14 @@
                                             N/A
                                         @endif
                                     </td>
+                                </tr> --}}
+                                <tr>
+                                    <th>Weight</th>
+                                    <td>{{ $product->product_weight . ' g'}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Purity</th>
+                                    <td>{{ $product->product_purity . ' Karat' }}</td>
                                 </tr>
                                 <tr>
                                     <th>Note</th>

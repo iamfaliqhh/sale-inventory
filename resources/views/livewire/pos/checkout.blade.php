@@ -125,16 +125,22 @@
                         <input wire:model.blur="global_tax" type="number" class="form-control" min="0" max="100" value="{{ $global_tax }}" required>
                     </div>
                 </div> --}}
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <div class="form-group">
                         <label for="discount_amount">Discount (Amount)</label>
                         <input wire:model.blur="global_discount" type="number" class="form-control" min="0" value="{{ $global_discount }}" required>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <div class="form-group">
                         <label for="shipping_amount">Shipping</label>
                         <input wire:model.blur="shipping" type="number" class="form-control" min="0" value="0" required step="0.01">
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="wage_amount">Wage</label>
+                        <input wire:model.blur="wage" type="number" class="form-control" min="0" value="{{ $wage }}" required step="0.01">
                     </div>
                 </div>
             </div>
