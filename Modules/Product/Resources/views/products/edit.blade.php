@@ -65,7 +65,11 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="product_weight">Weight (in grams) <span class="text-danger">*</span></label>
-                                        <input type="number" class="form-control" name="product_weight" required value="{{ $product->product_weight }}" min="0" step="0.01">
+                                        <input type="number" class="form-control" name="product_weight" id="product_weight" required value="{{ $product->product_weight }}" min="0" step="0.01">
+                                        {{-- <small id="calculated_price" class="mt-2 text-success font-weight-bold">Total Price: {{format_currency(0)}}</small> --}}
+                                        <small id="calculated_price" class="mt-2 text-success font-weight-bold">
+                                            Total Price: {{ settings()->currency->symbol . number_format($product->product_weight * $gold_price, 2) }}
+                                        </small>
                                     </div>
                                 </div>
                             </div>
