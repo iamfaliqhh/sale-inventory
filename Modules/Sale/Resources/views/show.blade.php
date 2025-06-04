@@ -63,10 +63,10 @@
                                 <thead>
                                 <tr>
                                     <th class="align-middle">Product</th>
-                                    <th class="align-middle">Net Unit Price</th>
+                                    <th class="align-middle">Purity</th>
                                     <th class="align-middle">Quantity</th>
-                                    <th class="align-middle">Discount</th>
-                                    <th class="align-middle">Tax</th>
+                                    <th class="align-middle">Weight</th>
+                                    <th class="align-middle">Price ({{settings()->currency->symbol}}/g)</th>
                                     <th class="align-middle">Sub Total</th>
                                 </tr>
                                 </thead>
@@ -80,19 +80,20 @@
                                             </span>
                                         </td>
 
-                                        <td class="align-middle">{{ format_currency($item->unit_price) }}</td>
+
+                                        <td class="align-middle">
+                                            {{ $item->purity . ' Karat' }}
+                                        </td>
 
                                         <td class="align-middle">
                                             {{ $item->quantity }}
                                         </td>
 
                                         <td class="align-middle">
-                                            {{ format_currency($item->product_discount_amount) }}
+                                            {{ $item->weight . 'g' }}
                                         </td>
 
-                                        <td class="align-middle">
-                                            {{ format_currency($item->product_tax_amount) }}
-                                        </td>
+                                        <td class="align-middle">{{ format_currency($item->unit_price) }}</td>
 
                                         <td class="align-middle">
                                             {{ format_currency($item->sub_total) }}
@@ -107,12 +108,12 @@
                                 <table class="table">
                                     <tbody>
                                     <tr>
-                                        <td class="left"><strong>Discount ({{ $sale->discount_percentage }}%)</strong></td>
+                                        <td class="left"><strong>Discount</strong></td>
                                         <td class="right">{{ format_currency($sale->discount_amount) }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="left"><strong>Tax ({{ $sale->tax_percentage }}%)</strong></td>
-                                        <td class="right">{{ format_currency($sale->tax_amount) }}</td>
+                                        <td class="left"><strong>Wage</strong></td>
+                                        <td class="right">{{ format_currency($sale->wage_amount) }}</td>
                                     </tr>
                                     <tr>
                                         <td class="left"><strong>Shipping</strong></td>

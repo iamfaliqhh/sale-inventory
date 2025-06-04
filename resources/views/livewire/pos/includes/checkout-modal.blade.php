@@ -31,6 +31,7 @@
                             {{-- Change discount to fixed amount --}}
                             <input type="hidden" value="{{ $global_discount }}" name="discount_amount">
                             <input type="hidden" value="{{ $shipping }}" name="shipping_amount">
+                            <input type="hidden" value="{{ $wage }}" name="wage_amount">
                             <div class="form-row">
                                 <div class="col-lg-6">
                                     <div class="form-group">

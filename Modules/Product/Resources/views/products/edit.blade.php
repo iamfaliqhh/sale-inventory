@@ -203,6 +203,18 @@
                 @endif
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const weightInput = document.getElementById('product_weight');
+            const calculatedPriceDiv = document.getElementById('calculated_price');
+            const goldPrice = {{ $gold_price }}; // Replace 'transaction' with the appropriate type if needed
+
+            weightInput.addEventListener('input', function () {
+                const weight = parseFloat(weightInput.value) || 0; // Get the weight input value
+                const calculatedPrice = weight * goldPrice; // Calculate the price
+                calculatedPriceDiv.textContent = `Total Price: {{ settings()->currency->symbol }}${calculatedPrice.toFixed(2).toLocaleString()}`;
+            });
+        });
     </script>
 
     <script src="{{ asset('js/jquery-mask-money.js') }}"></script>

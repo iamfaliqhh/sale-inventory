@@ -12,8 +12,9 @@ class Checkout extends Component
 
     public $cart_instance;
     public $customers;
-    public $global_discount;
-    public $shipping;
+    public int $global_discount = 0;
+    public int $shipping = 0;
+    public int $wage = 0;
     public $quantity;
     public $check_quantity;
     public $discount_type;
@@ -27,6 +28,7 @@ class Checkout extends Component
         $this->customers = $customers;
         $this->global_discount = 0;
         $this->shipping = 0.00;
+        $this->wage = 0.00;
         $this->check_quantity = [];
         $this->quantity = [];
         $this->discount_type = [];
@@ -79,8 +81,8 @@ class Checkout extends Component
             'id'      => $product['id'],
             'name'    => $product['product_name'],
             'qty'     => 1,
+            'weight'  => $product['product_weight'],
             'price'   => $this->calculate($product)['price'],
-            'weight'  => 1,
             'options' => [
                 'product_discount'      => 0.00,
                 'product_discount_type' => 'fixed',
@@ -89,7 +91,8 @@ class Checkout extends Component
                 'stock'                 => $product['product_quantity'],
                 'unit'                  => $product['product_unit'],
                 'product_tax'           => $this->calculate($product)['product_tax'],
-                'unit_price'            => $this->calculate($product)['unit_price']
+                'unit_price'            => $this->calculate($product)['unit_price'],
+                'product_purity'        => $product['product_purity'],
             ]
         ]);
 
@@ -104,9 +107,9 @@ class Checkout extends Component
         Cart::instance($this->cart_instance)->remove($row_id);
     }
 
-    public function updatedGlobalDiscount() {
-        Cart::instance($this->cart_instance)->setGlobalDiscount((integer)$this->global_discount);
-    }
+    // public function updatedGlobalDiscount() {
+    //     Cart::instance($this->cart_instance)->setGlobalDiscount((integer)$this->global_discount);
+    // }
 
     public function updateQuantity($row_id, $product_id) {
         if ($this->check_quantity[$product_id] < $this->quantity[$product_id]) {
