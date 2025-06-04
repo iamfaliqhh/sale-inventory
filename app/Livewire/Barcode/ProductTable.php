@@ -30,23 +30,6 @@ class ProductTable extends Component
         $this->barcodes = [];
     }
 
-    public function generateBarcodes(Product $product, $quantity) {
-        if ($quantity > 100) {
-            return session()->flash('message', 'Max quantity is 100 per barcode generation!');
-        }
-
-        if (!is_numeric($product->product_code)) {
-            return session()->flash('message', 'Can not generate Barcode with this type of Product Code');
-        }
-
-        $this->barcodes = [];
-
-        for ($i = 1; $i <= $quantity; $i++) {
-            $barcode = DNS1DFacade::getBarCodeSVG($product->product_code, $product->product_barcode_symbology,2 , 60, 'black', false);
-            array_push($this->barcodes, $barcode);
-        }
-    }
-
     public function getPdf() {
         $pdf = \PDF::loadView('product::barcode.print', [
             'barcodes' => $this->barcodes,

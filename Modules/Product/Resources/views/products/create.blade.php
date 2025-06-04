@@ -41,32 +41,21 @@
 
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <label for="category_id">Category <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <select class="form-control" name="category_id" id="category_id" required>
-                                            <option value="" selected disabled>Select Category</option>
-                                            @foreach(\Modules\Product\Entities\Category::all() as $category)
-                                                <option value="{{ $category->id }}">{{ $category->category_name }}</option>
-                                            @endforeach
-                                        </select>
-                                        <div class="input-group-append d-flex">
-                                            <button data-toggle="modal" data-target="#categoryCreateModal" class="btn btn-outline-primary" type="button">
-                                                Add
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="barcode_symbology">Barcode Symbology <span class="text-danger">*</span></label>
-                                        <select class="form-control" name="product_barcode_symbology" id="barcode_symbology" required>
-                                            <option value="" selected disabled>Select Symbology</option>
-                                            <option value="C128">Code 128</option>
-                                            <option value="C39">Code 39</option>
-                                            <option value="UPCA">UPC-A</option>
-                                            <option value="UPCE">UPC-E</option>
-                                            <option selected value="EAN13">EAN-13</option><option value="EAN8">EAN-8</option>
-                                        </select>
+                                        <label for="category_id">Category <span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <select class="form-control" name="category_id" id="category_id" required>
+                                                <option value="" selected disabled>Select Category</option>
+                                                @foreach(\Modules\Product\Entities\Category::all() as $category)
+                                                    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="input-group-append d-flex">
+                                                <button data-toggle="modal" data-target="#categoryCreateModal" class="btn btn-outline-primary" type="button">
+                                                    Add
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
