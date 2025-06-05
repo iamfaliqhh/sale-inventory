@@ -104,6 +104,11 @@
                                 <input type="hidden" value="{{ $shipping }}" name="shipping_amount">
                                 <td>(+) {{ format_currency($shipping) }}</td>
                             </tr>
+                            <tr>
+                                <th>Wage</th>
+                                <input type="hidden" value="{{ $wage }}" name="wage_amount">
+                                <td>(+) {{ format_currency($wage) }}</td>
+                            </tr>
                             <tr class="text-primary">
                                 <th>Grand Total</th>
                                 @php

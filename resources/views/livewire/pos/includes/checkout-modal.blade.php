@@ -26,12 +26,6 @@
                     <div class="row">
                         <div class="col-lg-7">
                             <input type="hidden" value="{{ $customer_id }}" name="customer_id">
-                            {{-- Remove tax --}}
-                            {{-- <input type="hidden" value="{{ $global_tax }}" name="tax_percentage"> --}}
-                            {{-- Change discount to fixed amount --}}
-                            <input type="hidden" value="{{ $global_discount }}" name="discount_amount">
-                            <input type="hidden" value="{{ $shipping }}" name="shipping_amount">
-                            <input type="hidden" value="{{ $wage }}" name="wage_amount">
                             <div class="form-row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
@@ -80,12 +74,18 @@
                                     </tr> --}}
                                     <tr>
                                         <th>Discount</th>
+                                        <input type="hidden" value="{{ $global_discount }}" name="discount_amount">
                                         <td>(-) {{ format_currency($global_discount) }}</td>
                                     </tr>
                                     <tr>
                                         <th>Shipping</th>
                                         <input type="hidden" value="{{ $shipping }}" name="shipping_amount">
                                         <td>(+) {{ format_currency($shipping) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Wage</th>
+                                        <input type="hidden" value="{{ $wage }}" name="wage_amount">
+                                        <td>(+) {{ format_currency($wage) }}</td>
                                     </tr>
                                     <tr class="text-primary">
                                         <th>Grand Total</th>
