@@ -216,6 +216,7 @@
 @endcan
 
 @can('access_customers|access_suppliers')
+{{-- salesperson permission have not added yet --}}
     <li class="c-sidebar-nav-item c-sidebar-nav-dropdown {{ request()->routeIs('customers.*') || request()->routeIs('suppliers.*') ? 'c-show' : '' }}">
         <a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
             <i class="c-sidebar-nav-icon bi bi-people" style="line-height: 1;"></i> Parties
@@ -235,6 +236,11 @@
                     </a>
                 </li>
             @endcan
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link {{ request()->routeIs('sales_person.*') ? 'c-active' : '' }}" href="{{ route('sales_person.index') }}">
+                    <i class="c-sidebar-nav-icon bi bi-people-fill" style="line-height: 1;"></i> Sales Person
+                </a>
+            </li>
         </ul>
     </li>
 @endcan

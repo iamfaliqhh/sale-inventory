@@ -17,5 +17,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('customers', 'CustomersController');
     //Suppliers
     Route::resource('suppliers', 'SuppliersController');
-
+    //SalesPerson
+    Route::resource('sales_person', 'SalesPersonController');
 });
