@@ -110,8 +110,8 @@ class ProductController extends Controller
             'product_name' => $product->product_name,
             'product_code' => $product->product_code,
             'quantity' => 1, // Assuming one product per buyback sale
-            'weight' => $product->product_weight,
-            'purity' => $product->product_purity,
+            'weight' => $product->product_weight * 100,
+            'purity' => $product->product_purity * 100,
             'price' => $product->product_weight * current_gold_price('buyback') * 100,
             'unit_price' => $product->product_weight * current_gold_price('buyback') * 100,
             'sub_total' => $product->product_weight * current_gold_price('buyback') * 100,

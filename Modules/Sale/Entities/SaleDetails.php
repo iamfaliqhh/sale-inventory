@@ -22,6 +22,14 @@ class SaleDetails extends Model
         return $this->belongsTo(Sale::class, 'sale_id', 'id');
     }
 
+    public function getWeightAttribute($value) {
+        return $value / 100;
+    }
+
+    public function getPurityAttribute($value) {
+        return $value / 100;
+    }
+
     public function getPriceAttribute($value) {
         return $value / 100;
     }

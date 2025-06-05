@@ -112,7 +112,7 @@
                             <tr class="text-primary">
                                 <th>Grand Total</th>
                                 @php
-                                    $total_with_shipping = Cart::instance($cart_instance)->total() + (float) $shipping - (float) $global_discount
+                                    $total_with_shipping = Cart::instance($cart_instance)->total() + (float) $shipping - (float) $global_discount + (float) $wage;
                                 @endphp
                                 <th>
                                     (=) {{ format_currency($total_with_shipping) }}
