@@ -123,7 +123,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="5" class="text-right"><strong>Grand Total:</strong></td>
-                                    <td class="align-middle"><strong>{{ format_currency($sale->total_amount + $sale->wage_amount) }}</strong></td>
+                                    <td class="align-middle"><strong>{{ format_currency($sale->total_amount) }}</strong></td>
                                 </tr>
                                 </tbody>
                             </table>

@@ -57,7 +57,7 @@ class Checkout extends Component
     }
 
     public function calculateTotal() {
-        return Cart::instance($this->cart_instance)->total() + $this->shipping - $this->global_discount;
+        return Cart::instance($this->cart_instance)->total() + $this->shipping - $this->global_discount + $this->wage;
     }
 
     public function resetCart() {
