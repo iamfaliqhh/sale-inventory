@@ -30,6 +30,25 @@
                     </div>
                 </div>
 
+                @if(!request()->has('tradein'))
+                <div class="form-group">
+                    <label for="sales_person_id">Sales Person <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <a href="{{ route('sales_person.create') }}" class="btn btn-primary">
+                                <i class="bi bi-person-plus"></i>
+                            </a>
+                        </div>
+                        <select wire:model.live="sales_person_id" id="sales_person_id" class="form-control">
+                            <option value="" selected>Select Sales Person</option>
+                            @foreach($sales_persons as $sales_person)
+                                <option value="{{ $sales_person->id }}">{{ $sales_person->sales_person_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                @endif
+
                 <div class="table-responsive">
                     <table class="table">
                         <thead>

@@ -16,6 +16,7 @@ class StorePosSaleRequest extends FormRequest
     {
         return [
             'customer_id' => 'required|numeric',
+            'sales_person_id' => 'nullable|numeric',
             'discount_amount' => 'required|numeric|min:0',
             'shipping_amount' => 'required|numeric',
             'wage_amount' => 'required|numeric',

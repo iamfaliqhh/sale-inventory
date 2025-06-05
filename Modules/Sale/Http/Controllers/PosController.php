@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Modules\People\Entities\Customer;
+use Modules\People\Entities\SalesPerson;
 use Modules\Product\Entities\Category;
 use Modules\Product\Entities\Product;
 use Modules\Sale\Entities\Sale;
@@ -22,9 +23,10 @@ class PosController extends Controller
         Cart::instance('sale')->destroy();
 
         $customers = Customer::all();
+        $sales_persons = SalesPerson::all();
         $product_categories = Category::all();
 
-        return view('sale::pos.index', compact('product_categories', 'customers'));
+        return view('sale::pos.index', compact('product_categories', 'customers', 'sales_persons'));
     }
 
     public function buyBack() {
@@ -62,7 +64,9 @@ class PosController extends Controller
                 'date' => now()->format('Y-m-d'),
                 'reference' => 'PSL',
                 'customer_id' => $request->customer_id,
-                'customer_name' => Customer::findOrFail($request->customer_id)->customer_name,
+                'sales_person_id' => $request->sales_person_id,
+                'customer_name' => $request->customer_id ? Customer::findOrFail($request->customer_id)->customer_name : null,
+                'sales_person_name' => $request->sales_person_id ? SalesPerson::findOrFail($request->sales_person_id)->sales_person_name : null,
                 'discount_amount' => $request->discount_amount * 100,
                 'shipping_amount' => $request->shipping_amount * 100,
                 'wage_amount' => $request->wage_amount,

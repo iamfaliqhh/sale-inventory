@@ -12,6 +12,7 @@ class Checkout extends Component
 
     public $cart_instance;
     public $customers;
+    public $sales_persons;
     public int $global_discount = 0;
     public int $shipping = 0;
     public int $wage = 0;
@@ -21,11 +22,13 @@ class Checkout extends Component
     public $item_discount;
     public $data;
     public $customer_id;
+    public $sales_person_id;
     public $total_amount;
 
-    public function mount($cartInstance, $customers) {
+    public function mount($cartInstance, $customers, $salesPersons) {
         $this->cart_instance = $cartInstance;
         $this->customers = $customers;
+        $this->sales_persons = $salesPersons;
         $this->global_discount = 0;
         $this->shipping = 0.00;
         $this->wage = 0.00;

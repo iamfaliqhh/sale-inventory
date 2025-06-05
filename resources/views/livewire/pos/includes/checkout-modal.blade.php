@@ -26,6 +26,7 @@
                     <div class="row">
                         <div class="col-lg-7">
                             <input type="hidden" value="{{ $customer_id }}" name="customer_id">
+                            <input type="hidden" value="{{ $sales_person_id }}" name="sales_person_id">
                             <div class="form-row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
