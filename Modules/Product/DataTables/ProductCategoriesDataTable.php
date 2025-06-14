@@ -15,6 +15,20 @@ class ProductCategoriesDataTable extends DataTable
     public function dataTable($query) {
         return datatables()
             ->eloquent($query)
+            ->filter(function ($query) {
+                if (request()->has('search') && $search = request('search')['value']) {
+                    $search = strtolower($search);
+                    $query->where(function ($q) use ($search) {
+                        $q->whereRaw('LOWER(category_code) LIKE ?', ["%{$search}%"])
+                          ->orWhereRaw('LOWER(category_name) LIKE ?', ["%{$search}%"])
+                          ->orWhereRaw('LOWER(created_at) LIKE ?', ["%{$search}%"]);
+                        // Only filter by products_count if search is numeric
+                        if (is_numeric($search)) {
+                            $q->orHaving('products_count', '=', (int)$search);
+                        }
+                    });
+                }
+            })
             ->addColumn('action', function ($data) {
                 return view('product::categories.partials.actions', compact('data'));
             });
