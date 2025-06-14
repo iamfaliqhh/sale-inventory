@@ -39,4 +39,20 @@
     .select2-container--default .select2-selection--single .select2-selection__arrow b {
         margin-top: 2px;
     }
+
+    @media print {
+        body {
+            visibility: hidden;
+        }
+        .printable {
+            visibility: visible;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        @page {
+            size: landscape;
+            margin: 0;
+        }
+    }
 </style>

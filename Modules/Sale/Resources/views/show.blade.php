@@ -29,7 +29,7 @@
                             <i class="bi bi-save"></i> Save
                         </a>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body printable">
                         <div class="row mb-4">
                             <div class="col-sm-4 mb-3 mb-md-0">
                                 <h5 class="mb-2 border-bottom pb-2">Company Info:</h5>
