@@ -24,6 +24,7 @@ class Checkout extends Component
     public $customer_id;
     public $sales_person_id;
     public $total_amount;
+    public $page;
 
     public function mount($cartInstance, $customers, $salesPersons) {
         $this->cart_instance = $cartInstance;
@@ -37,6 +38,7 @@ class Checkout extends Component
         $this->discount_type = [];
         $this->item_discount = [];
         $this->total_amount = 0;
+        $this->page = request()->has('tradein') ? 'Trade In' : 'Transaction';
     }
 
     public function hydrate() {

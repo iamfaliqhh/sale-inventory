@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                @if(!request()->has('tradein'))
+                @if($page == "Transaction")
                 <div class="form-group">
                     <label for="sales_person_id">Sales Person <span class="text-danger">*</span></label>
                     <div class="input-group">
