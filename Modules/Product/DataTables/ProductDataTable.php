@@ -38,7 +38,11 @@ class ProductDataTable extends DataTable
 
     public function query(Product $model)
     {
-        return $model->where('product_type', $this->type)->newQuery()->with('category');
+        return $model->where('product_type', $this->type)->newQuery()->with('category')
+        ->select(['products.*',
+            'products.id as product_id',
+            'products.created_at'
+        ]);
     }
 
     public function html()
