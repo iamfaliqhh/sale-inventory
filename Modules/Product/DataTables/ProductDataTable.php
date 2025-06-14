@@ -14,7 +14,13 @@ class ProductDataTable extends DataTable
 
     public function dataTable($query)
     {
-        $price = $this->type == "Buy Back" ? 'buyback' : 'transaction';
+        $price = 'transaction';
+        if($this->type === 'Buy Back') {
+            $price = 'buyback';
+        } elseif($this->type === 'Trade In') {
+            $price = 'trade_in';
+        }
+
         return datatables()
             ->eloquent($query)->with('category')
             ->addColumn('action', function ($data) {

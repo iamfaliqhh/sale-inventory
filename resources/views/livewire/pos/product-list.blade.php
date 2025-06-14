@@ -1,6 +1,21 @@
 <div>
     <div class="card border-0 shadow-sm mt-3">
         <div class="card-body">
+                @php
+                    if($product_type == 'Trade In') {
+                        $title = "Trade In";
+                        $url = route('products.create', ['tradein']);
+                    } else {
+                        $title = '';
+                        $url = route('products.create');
+                    }
+                @endphp
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Products</h5>
+                <a href="{{$url}}" class="btn btn-primary btn-sm">
+                    <i class="bi bi-plus"></i> Add {{$title}} Product
+                </a>
+            </div>
             <livewire:pos.filter :categories="$categories"/>
             <div class="row position-relative">
                 <div wire:loading.flex class="col-12 position-absolute justify-content-center align-items-center" style="top:0;right:0;left:0;bottom:0;background-color: rgba(255,255,255,0.5);z-index: 99;">

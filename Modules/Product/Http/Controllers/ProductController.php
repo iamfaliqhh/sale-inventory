@@ -37,6 +37,14 @@ class ProductController extends Controller
         ->render('product::products.index');
     }
 
+    public function tradein(ProductDataTable $dataTable) {
+        abort_if(Gate::denies('access_products'), 403);
+
+        return $dataTable
+        ->with('type', "Trade In")
+        ->render('product::products.index');
+    }
+
 
     public function create() {
         abort_if(Gate::denies('create_products'), 403);
@@ -46,8 +54,11 @@ class ProductController extends Controller
         if(request()->has('buyback')) {
             $type = "Buy Back";
             $gold_price = current_gold_price('buyback');
+        }elseif(request()->has('tradein')) {
+            $type = "Trade In";
+            $gold_price = current_gold_price('trade_in');
         }
-        
+
         return view('product::products.create', compact('type', 'gold_price'));
     }
 
@@ -79,6 +90,11 @@ class ProductController extends Controller
             toast('Error: ' . $e->getMessage(), 'error');
 
             return redirect()->back()->withInput();
+        }
+
+        if($product && $request->product_type == "Trade In") {
+            toast('Trade In Product Created!', 'success');
+           return redirect()->route('app.pos.index', ['tradein']);
         }
 
         toast($message, 'success');
