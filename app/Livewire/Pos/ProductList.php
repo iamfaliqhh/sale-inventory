@@ -25,11 +25,11 @@ class ProductList extends Component
     public function mount($categories) {
         $this->categories = $categories;
         $this->category_id = '';
-        $this->product_type = request()->has('tradein') ? 'Buy Back' : 'Normal';
+        $this->product_type = request()->has('trade_in') ? 'Trade In' : 'Normal';
     }
 
     public function render() {
-        $gold_price = $this->product_type === 'Buy Back' ? current_gold_price('trade_in') : current_gold_price('transaction');
+        $gold_price = $this->product_type === 'Trade In' ? current_gold_price('trade_in') : current_gold_price('transaction');
         return view('livewire.pos.product-list', [
             'products' => Product::when($this->product_type, function ($query) {
                 return $query->where('product_type', $this->product_type);

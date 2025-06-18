@@ -2,6 +2,15 @@
     <div class="card border-0 shadow-sm mt-3">
         <div class="card-body">
             <livewire:pos.filter :categories="$categories"/>
+            @if($product_type == "Trade In")
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <a href="{{ route('products.create', ['trade_in']) }}" class="btn btn-primary w-100">
+                       Add Product <i class="bi bi-plus"></i>
+                    </a>
+                </div>
+            </div>
+            @endif
             <div class="row position-relative">
                 <div wire:loading.flex class="col-12 position-absolute justify-content-center align-items-center" style="top:0;right:0;left:0;bottom:0;background-color: rgba(255,255,255,0.5);z-index: 99;">
                     <div class="spinner-border text-primary" role="status">

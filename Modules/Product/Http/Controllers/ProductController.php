@@ -24,17 +24,28 @@ class ProductController extends Controller
     public function index(ProductDataTable $dataTable) {
         abort_if(Gate::denies('access_products'), 403);
 
+        $type = "Normal";
         return $dataTable
-        ->with('type', "Normal")
-        ->render('product::products.index');
+        ->with('type', $type)
+        ->render('product::products.index', compact('type'));
     }
 
     public function buyback(ProductDataTable $dataTable) {
         abort_if(Gate::denies('access_products'), 403);
 
+        $type = "Buy Back";
         return $dataTable
-        ->with('type', "Buy Back")
-        ->render('product::products.index');
+        ->with('type', $type)
+        ->render('product::products.index', compact('type'));
+    }
+
+    public function tradein(ProductDataTable $dataTable) {
+        abort_if(Gate::denies('access_products'), 403);
+
+        $type = "Trade In";
+        return $dataTable
+        ->with('type', $type)
+        ->render('product::products.index', compact('type'));
     }
 
 
@@ -46,6 +57,9 @@ class ProductController extends Controller
         if(request()->has('buyback')) {
             $type = "Buy Back";
             $gold_price = current_gold_price('buyback');
+        }elseif(request()->has('trade_in')) {
+            $type = "Trade In";
+            $gold_price = current_gold_price('trade_in');
         }
         
         return view('product::products.create', compact('type', 'gold_price'));
@@ -59,11 +73,17 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
             $product = Product::create($request->except('document'));
+            $view = route('products.index');
 
             if($product && $request->product_type == "Buy Back") {
                 $this->createBuyBackSales($product);
-                $view = 'sales.index';
+                $view = route('sales.index');
                 $message = 'Buy Back Product Created!';
+            }
+
+            if ($request->product_type == "Trade In") {
+                $view = route('app.pos.index', ['trade_in']);
+                $message = 'Trade In Product Created!';
             }
 
             if ($request->has('document')) {
@@ -82,7 +102,7 @@ class ProductController extends Controller
         }
 
         toast($message, 'success');
-        return redirect()->route($view);
+        return redirect()->to($view);
     }
 
 

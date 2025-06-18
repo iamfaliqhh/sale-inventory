@@ -38,7 +38,7 @@ class Checkout extends Component
         $this->discount_type = [];
         $this->item_discount = [];
         $this->total_amount = 0;
-        $this->page = request()->has('tradein') ? 'Trade In' : 'Transaction';
+        $this->page = request()->has('trade_in') ? 'Trade In' : 'Transaction';
     }
 
     public function hydrate() {

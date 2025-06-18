@@ -34,12 +34,17 @@
                 <i class="c-sidebar-nav-icon bi bi-arrow-counterclockwise" style="line-height: 1;"></i> All Buyback Products
             </a>
         </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link {{ request()->routeIs('products.tradein') ? 'c-active' : '' }}" href="{{ route('products.tradein') }}">
+                <i class="c-sidebar-nav-icon bi bi-arrow-left-right" style="line-height: 1;"></i> All Trade In Products
+            </a>
+        </li>
         @can('print_barcodes')
-           <li class="c-sidebar-nav-item">
+           {{-- <li class="c-sidebar-nav-item">
                <a class="c-sidebar-nav-link {{ request()->routeIs('barcode.print') ? 'c-active' : '' }}" href="{{ route('barcode.print') }}">
                    <i class="c-sidebar-nav-icon bi bi-printer" style="line-height: 1;"></i> Print Barcode
                </a>
-           </li>
+           </li> --}}
         @endcan
     </ul>
 </li>

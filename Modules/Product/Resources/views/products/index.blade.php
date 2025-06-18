@@ -19,9 +19,19 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
+                        @if($type == "Trade In")
+                        <a href="{{ route('products.create', ['trade_in']) }}" class="btn btn-primary mb-3">
+                            Add Trade In Product <i class="bi bi-plus"></i>
+                        </a>
+                        @elseif($type == "Buy Back")
+                        <a href="{{ route('products.create', ['buyback']) }}" class="btn btn-primary mb-3">
+                            Create Buy Back Transaction <i class="bi bi-plus"></i>
+                        </a>
+                        @else
                         <a href="{{ route('products.create') }}" class="btn btn-primary">
                             Add Product <i class="bi bi-plus"></i>
                         </a>
+                        @endif
 
                         <hr>
 

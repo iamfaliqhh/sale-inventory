@@ -27,7 +27,7 @@
             </button>
             <ul class="dropdown-menu">
                 <li>
-                    <a class="dropdown-item {{ request()->routeIs('app.pos.index') && !request()->has('tradein') ? 'disabled' : '' }}" href="{{ route('app.pos.index') }}">
+                    <a class="dropdown-item {{ request()->routeIs('app.pos.index') && !request()->has('trade_in') ? 'disabled' : '' }}" href="{{ route('app.pos.index') }}">
                         <i class="bi bi-cash mr-1"></i>Transaction
                     </a>
                 </li>
@@ -36,7 +36,7 @@
                         <i class="bi bi-arrow-counterclockwise mr-1"></i> Buyback
                     </a>
                 <li>
-                    <a class="dropdown-item {{ request()->routeIs('app.pos.index') && request()->has('tradein') ? 'disabled' : '' }}" href="{{ route('app.pos.index', ['tradein']) }}">
+                    <a class="dropdown-item {{ request()->routeIs('app.pos.index') && request()->has('trade_in') ? 'disabled' : '' }}" href="{{ route('app.pos.index', ['trade_in']) }}">
                         <i class="bi bi-arrow-left-right mr-1"></i> Trade-In
                     </a>
                 </li>
