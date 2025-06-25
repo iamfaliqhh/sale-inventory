@@ -22,7 +22,7 @@
 
 `nwidart/laravel-modules` is a Laravel package which created to manage your large Laravel app using modules. Module is like a Laravel package, it has some views, controllers or models. This package is supported and tested in Laravel 10.
 
-This package is a re-published, re-organised and maintained version of [pingpong/modules](https://github.com/pingpong-labs/modules), which isn't maintained anymore. This package is used in [AsgardCMS](https://asgardcms.com/).
+This package is a re-published, re-organised and maintained version of [pingpong/modules](https://github.com/pingpong-labs/modules), which isn't maintained anymore. This package is used in [AsgardCMS](https://github.com/AsgardCms).
 
 With one big added bonus that the original package didn't have: **tests**.
 
@@ -30,7 +30,7 @@ Find out why you should use this package in the article: [Writing modular applic
 
 ## Install
 
-To install through Composer, by run the following command:
+To install via Composer, run:
 
 ``` bash
 composer require nwidart/laravel-modules
@@ -45,17 +45,15 @@ php artisan vendor:publish --provider="Nwidart\Modules\LaravelModulesServiceProv
 ```
 
 ### Autoloading
-
-By default, the module classes are not loaded automatically. You can autoload your modules using `psr-4`. For example:
-
+By default, module classes aren't loaded automatically. To autoload them using psr-4, add the following line to the end of the root composer.json file under the autoload section:
 ``` json
 {
   "autoload": {
     "psr-4": {
       "App\\": "app/",
-      "Modules\\": "Modules/",
       "Database\\Factories\\": "database/factories/",
-      "Database\\Seeders\\": "database/seeders/"
+      "Database\\Seeders\\": "database/seeders/",
+      "Modules\\": "Modules/"
   }
 
 }
@@ -67,6 +65,10 @@ By default, the module classes are not loaded automatically. You can autoload yo
 
 You'll find installation instructions and full documentation on [https://docs.laravelmodules.com/](https://docs.laravelmodules.com/).
 
+## Community
+
+We also have a Discord community. [https://discord.gg/hkF7BRvRZK](https://discord.gg/hkF7BRvRZK) For quick help, ask questions in the appropriate channel.
+
 ## Credits
 
 - [Nicolas Widart](https://github.com/nwidart)
@@ -77,7 +79,6 @@ You'll find installation instructions and full documentation on [https://docs.la
 ## About Nicolas Widart
 
 Nicolas Widart is a freelance web developer specialising on the Laravel framework. View all my packages [on my website](https://nwidart.com/), or visit [my website](https://nicolaswidart.com).
-
 
 ## License
 

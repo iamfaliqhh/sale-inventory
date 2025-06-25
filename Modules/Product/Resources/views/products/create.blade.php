@@ -81,7 +81,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="product_purity">Purity (in Karat) <span class="text-danger">*</span></label>
-                                        <input type="number" class="form-control" name="product_purity" required value="{{ old('product_purity', 24) }}" min="1" max="24" step="0.01">
+                                        <input type="number" class="form-control" name="product_purity" required value="{{ old('product_purity', 22) }}" min="1" max="24">
                                     </div>
                                 </div>
                                 <div class="col-md-4">

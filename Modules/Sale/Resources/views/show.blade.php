@@ -30,6 +30,7 @@
                         </a>
                     </div>
                     <div class="card-body printable">
+                        <img src="{{ asset('images/print-header.png') }}" alt="Kedai Emas Aidid Gold" width="100%">
                         <div class="row mb-4">
                             <div class="col-sm-4 mb-3 mb-md-0">
                                 <h5 class="mb-2 border-bottom pb-2">Company Info:</h5>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/1ab94d0eba.js" crossorigin="anonymous"></script>
     <title>Login | {{ config('app.name') }}</title>
+    <link rel="icon" href="{{ asset('images/favicon.png') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
@@ -14,6 +15,9 @@
                 {{ Session::get('account_deactivated') }}
             </div>
         @endif
+        <div class="login-logo" style="text-align: center; margin-bottom: 1rem;">
+            <img src="{{ asset('images/login-logo.png') }}" alt="Logo" style="height: 60px;">
+        </div>
         <h2>Login</h2>
         <form id="login" method="post" action="{{ url('/login') }}">
             @csrf
