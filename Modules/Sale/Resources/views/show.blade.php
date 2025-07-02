@@ -174,7 +174,7 @@
                         <!-- bagian ini baru beberapa yg nyambung ke database ga tau apa yg mau di sambungin soal nya :) -->
                         <div class="disclaimer-section" style="margin-top:30px;font-size:13px;text-align:center;">
                             <div class="footer-tagline">
-                                <span>Nama Jurujual: {{ $sale->user->name ?? '-' }}</span><br>
+                                <span>Nama Jurujual: {{ $sale->sales_person_name?? '-' }}</span><br>
                             </div>
                         </div>
 
