@@ -151,8 +151,11 @@
                         
                         {{-- Totals Table Wrapper --}}
                         <div style="width: 100%; display: flex; justify-content: flex-end;">
-                            <table style="width:50%; margin-top:10px; font-size:15px; border: none;">
+                            <table style="width:100%; margin-top:10px; font-size:15px; border: none;">
                                 <tr>
+                                    <td style="width:50%; text-align:left; vertical-align:top;" rowspan="4">
+                                        Nama Jurujual: <strong>{{ $sale->sales_person_name ?? '-' }}</strong>
+                                    </td>
                                     <td style="text-align:right !important;">JUMLAH ({{ settings()->currency->symbol }})</td>
                                     <td style="text-align:right !important;">{{ format_currency($sale->saleDetails->sum('sub_total')) }}</td>
                                 </tr>
@@ -170,15 +173,9 @@
                                 </tr>
                             </table>
                         </div>
-
                         <!-- bagian ini baru beberapa yg nyambung ke database ga tau apa yg mau di sambungin soal nya :) -->
-                        <div class="disclaimer-section" style="margin-top:30px;font-size:13px;text-align:center;">
-                            <div class="footer-tagline">
-                                <span>Nama Jurujual: {{ $sale->sales_person_name?? '-' }}</span><br>
-                            </div>
-                        </div>
 
-                        <div class="disclaimer-section" style="margin-top:30px;font-size:13px;text-align:center;">
+                        <div class="disclaimer-section" style="margin-top:15px;font-size:14px;text-align:center;">
                             <div class="footer-tagline">SAYA KEDAI EMAS AIDID GOLD MENJUAL BARANG TERSEBUT DENGAN HARGA YANG DI PERSETUJUI<br></div>
                             <br>
                             <div class="footer-tagline">DISCLAIMER:</div>
