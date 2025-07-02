@@ -29,13 +29,16 @@ class ProductCategoriesDataTable extends DataTable
                     });
                 }
             })
+            ->editColumn('products_sum_product_quantity', function ($row) {
+                return $row->products_sum_product_quantity ?? 0;
+            })
             ->addColumn('action', function ($data) {
                 return view('product::categories.partials.actions', compact('data'));
             });
     }
 
     public function query(Category $model) {
-        return $model->newQuery()->withCount('products');
+        return $model->newQuery()->withSum('products', 'product_quantity');
     }
 
     public function html() {
@@ -67,7 +70,8 @@ class ProductCategoriesDataTable extends DataTable
             Column::make('category_name')
                 ->addClass('text-center'),
 
-            Column::make('products_count')
+            Column::make('products_sum_product_quantity')
+                ->title('Products Count')
                 ->addClass('text-center'),
 
             Column::computed('action')
