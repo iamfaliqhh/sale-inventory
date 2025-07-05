@@ -74,7 +74,9 @@ class Checkout extends Component
         } else {
             session()->flash('message', 'Please Select Customer!');
         }
-    }    public function calculateTotal() {
+    }
+
+    public function calculateTotal() {
         // Calculate total manually to handle negative trade-in values
         $cart = Cart::instance($this->cart_instance);
         $subtotal = 0;
@@ -154,10 +156,6 @@ class Checkout extends Component
         // Recalculate total
         $this->total_amount = $this->calculateTotal();
     }
-
-    // public function updatedGlobalDiscount() {
-    //     Cart::instance($this->cart_instance)->setGlobalDiscount((integer)$this->global_discount);
-    // }
 
     public function updateQuantity($row_id, $product_id) {
         if ($this->check_quantity[$product_id] < $this->quantity[$product_id]) {
@@ -258,20 +256,12 @@ class Checkout extends Component
     }
 
     public function calculateTradeInValue() {
-        if ($this->trade_in_product_weight && $this->trade_in_product_purity) {
+        if ($this->trade_in_product_weight) {
             $gold_price = current_gold_price('trade_in');
-            $this->trade_in_total_value = $this->trade_in_product_weight * $gold_price * ($this->trade_in_product_purity / 100);
+            $this->trade_in_total_value = $this->trade_in_product_weight * $gold_price;
         } else {
             $this->trade_in_total_value = 0;
         }
-    }
-
-    public function updatedTradeInProductWeight() {
-        $this->calculateTradeInValue();
-    }
-
-    public function updatedTradeInProductPurity() {
-        $this->calculateTradeInValue();
     }
 
     public function addTradeInProduct() {
@@ -346,17 +336,5 @@ class Checkout extends Component
         $this->trade_in_product_weight = '';
         $this->trade_in_product_purity = '';
         $this->trade_in_total_value = 0;
-    }
-
-    public function updatedShipping() {
-        $this->total_amount = $this->calculateTotal();
-    }
-
-    public function updatedGlobalDiscount() {
-        $this->total_amount = $this->calculateTotal();
-    }
-
-    public function updatedWage() {
-        $this->total_amount = $this->calculateTotal();
     }
 }
