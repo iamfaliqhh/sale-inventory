@@ -102,7 +102,7 @@
                             </a>
                         </div>
                         <select wire:model.live="sales_person_id" id="sales_person_id" class="form-control">
-                            <option value="" selected>Select Sales Person</option>
+                            <option value="" selected">Select Sales Person</option>
                             @foreach($sales_persons as $sales_person)
                                 <option value="{{ $sales_person->id }}">{{ $sales_person->sales_person_name }}</option>
                             @endforeach
@@ -140,12 +140,9 @@
                                     </td>
 
                                     <td class="align-middle {{ isset($cart_item->options->is_trade_in) && $cart_item->options->is_trade_in ? 'text-success font-weight-bold' : '' }}">
+                                        {{ format_currency($cart_item->price) }}
                                         @if(isset($cart_item->options->is_trade_in) && $cart_item->options->is_trade_in)
-                                            {{ format_currency($cart_item->price) }}
                                             <small class="d-block text-muted">{{ $cart_item->weight }}g x {{ $cart_item->options->product_purity }}%</small>
-                                            <small class="d-block text-info">Credit Value</small>
-                                        @else
-                                            {{ format_currency($cart_item->price) }}
                                         @endif
                                     </td>
 
@@ -183,17 +180,6 @@
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <tr>
-                                <th>Subtotal</th>
-                                @php
-                                    $cart = Cart::instance($cart_instance);
-                                    $subtotal = 0;
-                                    foreach ($cart->content() as $item) {
-                                        $subtotal += ($item->price * $item->qty);
-                                    }
-                                @endphp
-                                <td>{{ format_currency($subtotal) }}</td>
-                            </tr>
-                            <tr>
                                 <th>Discount</th>
                                 <td>(-) {{ format_currency($global_discount) }}</td>
                             </tr>
@@ -210,7 +196,7 @@
                             <tr class="text-primary">
                                 <th>Grand Total</th>
                                 @php
-                                    $total_with_shipping = $total_amount;
+                                    $total_with_shipping = Cart::instance($cart_instance)->total() + (float) $shipping - (float) $global_discount + (float) $wage;
                                 @endphp
                                 <th>
                                     (=) {{ format_currency($total_with_shipping) }}

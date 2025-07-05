@@ -30,9 +30,13 @@ class ProductList extends Component
 
     public function render() {
         $gold_price = $this->product_type === 'Trade In' ? current_gold_price('trade_in') : current_gold_price('transaction');
+
+        // For Trade In mode, show Normal products instead of Trade In products
+        $productTypeFilter = $this->product_type === 'Trade In' ? 'Normal' : $this->product_type;
+
         return view('livewire.pos.product-list', [
-            'products' => Product::when($this->product_type, function ($query) {
-                return $query->where('product_type', $this->product_type);
+            'products' => Product::when($productTypeFilter, function ($query) use ($productTypeFilter) {
+                return $query->where('product_type', $productTypeFilter);
             })
             ->when($this->category_id, function ($query) {
                 return $query->where('category_id', $this->category_id);

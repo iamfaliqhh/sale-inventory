@@ -4,6 +4,7 @@ namespace App\Livewire\Pos;
 
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Livewire\Component;
+use Modules\Product\Entities\Product;
 
 class Checkout extends Component
 {
@@ -26,6 +27,20 @@ class Checkout extends Component
     public $total_amount;
     public $page;
 
+    // Trade-in form properties
+    public $trade_in_product_name = '';
+    public $trade_in_product_code = '';
+    public $trade_in_product_weight = '';
+    public $trade_in_product_purity = '';
+    public $trade_in_total_value = 0;
+
+    protected $rules = [
+        'trade_in_product_name' => 'required|string|max:255',
+        'trade_in_product_code' => 'required|string|max:255|unique:products,product_code',
+        'trade_in_product_weight' => 'required|numeric|min:0.01',
+        'trade_in_product_purity' => 'required|numeric|min:1|max:100',
+    ];
+
     public function mount($cartInstance, $customers, $salesPersons) {
         $this->cart_instance = $cartInstance;
         $this->customers = $customers;
@@ -37,8 +52,8 @@ class Checkout extends Component
         $this->quantity = [];
         $this->discount_type = [];
         $this->item_discount = [];
-        $this->total_amount = 0;
         $this->page = request()->has('trade_in') ? 'Trade In' : 'Transaction';
+        $this->total_amount = $this->calculateTotal();
     }
 
     public function hydrate() {
@@ -59,10 +74,19 @@ class Checkout extends Component
         } else {
             session()->flash('message', 'Please Select Customer!');
         }
-    }
+    }    public function calculateTotal() {
+        // Calculate total manually to handle negative trade-in values
+        $cart = Cart::instance($this->cart_instance);
+        $subtotal = 0;
 
-    public function calculateTotal() {
-        return Cart::instance($this->cart_instance)->total() + $this->shipping - $this->global_discount + $this->wage;
+        foreach ($cart->content() as $item) {
+            $itemTotal = $item->price * $item->qty;
+            $subtotal += $itemTotal;
+        }
+
+        $finalTotal = $subtotal + $this->shipping - $this->global_discount + $this->wage;
+
+        return $finalTotal;
     }
 
     public function resetCart() {
@@ -109,7 +133,26 @@ class Checkout extends Component
     }
 
     public function removeItem($row_id) {
+        // Get the cart item before removing to check if it's a trade-in
+        $cart_item = Cart::instance($this->cart_instance)->get($row_id);
+
+        // If it's a trade-in product, remove it from database too
+        if (isset($cart_item->options->is_trade_in) && $cart_item->options->is_trade_in) {
+            $product = Product::find($cart_item->id);
+            if ($product && $product->product_type === 'Trade In') {
+                $product->delete();
+            }
+
+            // Remove from tracking arrays
+            unset($this->check_quantity[$cart_item->id]);
+            unset($this->quantity[$cart_item->id]);
+        }
+
+        // Remove from cart
         Cart::instance($this->cart_instance)->remove($row_id);
+
+        // Recalculate total
+        $this->total_amount = $this->calculateTotal();
     }
 
     // public function updatedGlobalDiscount() {
@@ -139,6 +182,8 @@ class Checkout extends Component
                 'product_discount_type' => $cart_item->options->product_discount_type,
             ]
         ]);
+
+        $this->total_amount = $this->calculateTotal();
     }
 
     public function discountModalRefresh($product_id, $row_id) {
@@ -208,5 +253,110 @@ class Checkout extends Component
             'product_discount'      => $discount_amount,
             'product_discount_type' => $this->discount_type[$product_id],
         ]]);
+
+
+    }
+
+    public function calculateTradeInValue() {
+        if ($this->trade_in_product_weight && $this->trade_in_product_purity) {
+            $gold_price = current_gold_price('trade_in');
+            $this->trade_in_total_value = $this->trade_in_product_weight * $gold_price * ($this->trade_in_product_purity / 100);
+        } else {
+            $this->trade_in_total_value = 0;
+        }
+    }
+
+    public function updatedTradeInProductWeight() {
+        $this->calculateTradeInValue();
+    }
+
+    public function updatedTradeInProductPurity() {
+        $this->calculateTradeInValue();
+    }
+
+    public function addTradeInProduct() {
+        // Validate the trade-in product form
+        $this->validate([
+            'trade_in_product_name' => 'required|string|max:255',
+            'trade_in_product_code' => 'required|string|max:255|unique:products,product_code',
+            'trade_in_product_weight' => 'required|numeric|min:0.01',
+            'trade_in_product_purity' => 'required|numeric|min:1|max:100',
+        ]);
+
+        // Calculate the trade-in value
+        $this->calculateTradeInValue();
+
+        // Find default category or create one
+        $defaultCategory = \Modules\Product\Entities\Category::first();
+        $categoryId = $defaultCategory ? $defaultCategory->id : 1;
+
+        // Create the trade-in product in the database
+        $tradeInProduct = Product::create([
+            'product_name' => $this->trade_in_product_name,
+            'product_code' => $this->trade_in_product_code,
+            'product_weight' => $this->trade_in_product_weight,
+            'product_purity' => $this->trade_in_product_purity,
+            'product_price' => $this->trade_in_total_value,
+            'product_cost' => $this->trade_in_total_value,
+            'product_quantity' => 1,
+            'product_type' => 'Trade In',
+            'product_unit' => 'gram',
+            'product_stock_alert' => 0,
+            'product_order_tax' => 0,
+            'product_tax_type' => 3,
+            'category_id' => $categoryId,
+        ]);
+
+        // Add to cart with negative value for trade-in
+        $cart = Cart::instance($this->cart_instance);
+        $cart->add([
+            'id'      => $tradeInProduct->id,
+            'name'    => $tradeInProduct->product_name,
+            'qty'     => 1,
+            'weight'  => $tradeInProduct->product_weight,
+            'price'   => -$this->trade_in_total_value, // Negative value for trade-in
+            'options' => [
+                'product_discount'      => 0.00,
+                'product_discount_type' => 'fixed',
+                'sub_total'             => -$this->trade_in_total_value,
+                'code'                  => $tradeInProduct->product_code,
+                'stock'                 => 1,
+                'unit'                  => $tradeInProduct->product_unit,
+                'product_tax'           => 0,
+                'unit_price'            => -$this->trade_in_total_value,
+                'product_purity'        => $tradeInProduct->product_purity,
+                'is_trade_in'           => true,
+            ]
+        ]);
+
+        // Reset the form
+        $this->resetTradeInForm();
+
+        // Update total amount
+        $this->check_quantity[$tradeInProduct->id] = 1;
+        $this->quantity[$tradeInProduct->id] = 1;
+        $this->total_amount = $this->calculateTotal();
+
+        session()->flash('message', 'Trade-in product added successfully!');
+    }
+
+    public function resetTradeInForm() {
+        $this->trade_in_product_name = '';
+        $this->trade_in_product_code = '';
+        $this->trade_in_product_weight = '';
+        $this->trade_in_product_purity = '';
+        $this->trade_in_total_value = 0;
+    }
+
+    public function updatedShipping() {
+        $this->total_amount = $this->calculateTotal();
+    }
+
+    public function updatedGlobalDiscount() {
+        $this->total_amount = $this->calculateTotal();
+    }
+
+    public function updatedWage() {
+        $this->total_amount = $this->calculateTotal();
     }
 }
