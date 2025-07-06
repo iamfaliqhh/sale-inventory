@@ -6,6 +6,12 @@
             size: A4;
             margin: 1cm;
         }
+        
+        .printable-page:not(:last-child) {
+            padding-bottom: 30px;
+            margin-bottom: 30px;
+            border-bottom: 2px dashed #cccccc;
+        }
 
         @media print {
             .c-sidebar,
@@ -46,22 +52,31 @@
             }
             
             .printable .disclaimer-section {
-                margin-top: 25px;
-                padding: 10px;
+                margin-top: 0px;
+                padding-left: 14px;
             }
+
             .footer-tagline {
-                display: flex;
-                justify-content: space-between;
-                width: 100%;
-                font-weight: normal; 
-            }
-        }
-        .footer-tagline {
                 display: flex;
                 justify-content: space-between;
                 width: 100%;
                 font-weight: normal;
             }
+            
+            .printable-page:not(:last-child) {
+                padding-bottom: 0 !important;
+                margin-bottom: 0 !important;
+                border-bottom: none !important;
+                page-break-after: always;
+            }
+        }
+
+        .footer-tagline {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-weight: normal;
+        }
     </style>
 @endpush
 
@@ -80,114 +95,139 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    {{-- This card-header will be hidden on print --}}
                     <div class="card-header d-flex flex-wrap align-items-center">
                         <div>
                             Reference: <strong>{{ $sale->reference }}</strong>
                         </div>
                         <a class="btn btn-sm btn-secondary mfs-auto mfe-1 d-print-none"
-                           href="javascript:void(0);" onclick="window.print();">
+                            href="javascript:void(0);" onclick="window.print();">
                             <i class="bi bi-printer"></i> Print
                         </a>
                         <a target="_blank" class="btn btn-sm btn-info mfe-1 d-print-none" href="{{ route('sales.pdf', $sale->id) }}">
                             <i class="bi bi-save"></i> Save
                         </a>
                     </div>
-                    
-                    {{-- This is the main printable area --}}
+
                     <div class="card-body printable" style="background: #fff;">
-                        <div style="text-align:center; font-size:15px;">
-                            <img src="{{ asset('images/print-header.png') }}" alt="Kedai Emas Aidid Gold" style="width:100%;">
-                            Dimiliki oleh: ASIA KASIH ENTERPRISE (002930393-A)
-                            <div>Alamat: {{ settings()->company_address }}</div>
-                        </div>
 
-                        {{-- Customer and Invoice Info Table --}}
-                        <table style="width:100%;margin-top:20px;margin-bottom:20px;font-size:15px;">
-                            <tr>
-                                <td style="width:50%; text-align: left !important;">
-                                    <strong>M/S {{ $customer->customer_name }}</strong><br>
-                                    Phone: {{ $customer->customer_phone }}
-                                </td>
-                                <td style="width:50%; text-align: right !important;">
-                                    <strong>TARIKH:</strong> {{ \Carbon\Carbon::parse($sale->date)->format('d/m/Y') }}<br>
-                                    <strong>NO INVOIS:</strong> {{ $sale->reference }}
-                                </td>
-                            </tr>
-                        </table>
+                        @php
+                            $saleDetailsChunks = $sale->saleDetails->chunk(5);
+                            $totalPages = count($saleDetailsChunks);
+                        @endphp
 
-                        {{-- Sale Details Table --}}
-                        <table style="width:100%;border-collapse:collapse;font-size:15px;">
-                            <thead>
-                                <tr>
-                                    <th style="border:1px solid #000;">No.</th>
-                                    <th style="border:1px solid #000;">Jenis Barang</th>
-                                    <th style="border:1px solid #000;">Ketulenan</th>
-                                    <th style="border:1px solid #000;">Berat (g)</th>
-                                    <th style="border:1px solid #000;">Harga Emas ({{ settings()->currency->symbol }}/g)</th>
-                                    <th style="border:1px solid #000;">Upah ({{ settings()->currency->symbol }})</th>
-                                    <th style="border:1px solid #000;">Jumlah ({{ settings()->currency->symbol }})</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($sale->saleDetails as $i => $item)
-                                <tr>
-                                    <td style="border:1px solid #000;">{{ $i + 1 }}</td>
-                                    <td style="border:1px solid #000;">{{ $item->product_name }}</td>
-                                    <td style="border:1px solid #000;">{{ $item->purity }}</td>
-                                    <td style="border:1px solid #000;">{{ $item->weight }}</td>
-                                    <td style="border:1px solid #000;">{{ format_currency($item->unit_price) }}</td>
-                                    <td style="border:1px solid #000;">{{ format_currency($item->wage ?? 0) }}</td>
-                                    <td style="border:1px solid #000;">{{ format_currency($item->sub_total) }}</td>
-                                </tr>
-                                @endforeach
-                                <tr>
-                                    <td colspan="3" style="border:1px solid #000;"><strong>JUMLAH BERAT</strong></td>
-                                    <td style="border:1px solid #000;"><strong>{{ $sale->saleDetails->sum('weight') }}</strong></td>
-                                    <td colspan="3" style="border:1px solid #000;"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        
-                        {{-- Totals Table Wrapper --}}
-                        <div style="width: 100%; display: flex; justify-content: flex-end;">
-                            <table style="width:100%; margin-top:10px; font-size:15px; border: none;">
-                                <tr>
-                                    <td style="width:50%; text-align:left; vertical-align:top;" rowspan="4">
-                                        Nama Jurujual: <strong>{{ $sale->sales_person_name ?? '-' }}</strong>
-                                    </td>
-                                    <td style="text-align:right !important;">JUMLAH ({{ settings()->currency->symbol }})</td>
-                                    <td style="text-align:right !important;">{{ format_currency($sale->saleDetails->sum('sub_total')) }}</td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:right !important;">TRADE IN LAMA ({{ settings()->currency->symbol }})</td>
-                                    <td style="text-align:right !important;">{{ format_currency($sale->trade_in_amount ?? 0) }}</td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:right !important;">ADJ ({{ settings()->currency->symbol }})</td>
-                                    <td style="text-align:right !important;">{{ format_currency($sale->adjustment_amount ?? 0) }}</td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:right !important;"><strong>TOTAL BAYARAN ({{ settings()->currency->symbol }})</strong></td>
-                                    <td style="text-align:right !important;"><strong>{{ format_currency($sale->total_amount) }}</strong></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <!-- bagian ini baru beberapa yg nyambung ke database ga tau apa yg mau di sambungin soal nya :) -->
+                        @foreach ($saleDetailsChunks as $pageNumber => $itemsOnPage)
+                            <div class="printable-page">
+                                
+                                <div style="text-align:center; font-size:14px;">
+                                    <img src="{{ asset('images/print-header.png') }}" alt="Kedai Emas Aidid Gold" style="width:100%;">
+                                    Dimiliki oleh: ASIA KASIH ENTERPRISE (002930393-A)
+                                    <div>Alamat: {{ settings()->company_address }}</div>
+                                </div>
 
-                        <div class="disclaimer-section" style="margin-top:15px;font-size:14px;text-align:center;">
-                            <div class="footer-tagline">SAYA KEDAI EMAS AIDID GOLD MENJUAL BARANG TERSEBUT DENGAN HARGA YANG DI PERSETUJUI<br></div>
-                            <br>
-                            <div class="footer-tagline">DISCLAIMER:</div>
-                            <div class="footer-tagline">SAYA TELAH MEMERIKSA DAN BERPUAS HATI DENGAN BARANG YANG DI BELI/ DI BAIKI BERADA DALAM KEADAAN BAIK<br></div>
-                            <br>
-                            <strong>"TERIMA KASIH SILA DATANG LAGI"</strong><br>
-                            <br>
-                            <div class="footer-tagline">
-                                <span>AIDID GOLD SIMBOL KEMEWAHAN ANDA</span>
-                                <span>CITARASA ANDA KEPUASAN KAMI</span>
+                                <table style="width:100%;margin-top:20px;margin-bottom:20px;font-size:15px;">
+                                    <tr>
+                                        <td style="width:50%; text-align: left !important;">
+                                            <strong style="text-transform:uppercase;">M/S {{ $customer->customer_name }}</strong><br>
+                                            <strong style="text-transform:uppercase;">Phone:</strong> {{ $customer->customer_phone }}
+                                        </td>
+                                        <td style="width:50%; text-align: right !important;">
+                                            <strong>TARIKH:</strong> {{ \Carbon\Carbon::parse($sale->date)->format('d/m/Y') }}<br>
+                                            <strong>NO INVOIS:</strong> {{ $sale->reference }}
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                {{-- Gaya tabel inline tidak diubah sesuai permintaan --}}
+                                <table style="width:100%; border-collapse:collapse; font-size:15px; border: 1px solid #000;">
+                                    <thead>
+                                        <tr>
+                                            <th style="line-height:2.2; text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;">No.</th>
+                                            <th style="line-height:2.2; text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;;">Jenis Barang</th>
+                                            <th style="line-height:2.2; text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;">Ketulenan</th>
+                                            <th style="line-height:2.2; text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;">Berat (g)</th>
+                                            <th style="line-height:2.2; text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;">Harga Emas ({{ settings()->currency->symbol }}/g)</th>
+                                            <th style="line-height:2.2; text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;">Upah ({{ settings()->currency->symbol }})</th>
+                                            <th style="line-height:2.2; text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;">Jumlah ({{ settings()->currency->symbol }})</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($itemsOnPage as $i => $item)
+                                        <tr>
+                                            <td style="line-height:2.2; text-align: center; border-right: 1px solid #000;">{{ $i + 1 }}</td>
+                                            <td style="line-height:2.2; text-align: left; border-right: 1px solid #000; text-transform:uppercase; padding-left:10px">{{ $item->product_name }}</td>
+                                            <td style="line-height:2.2; text-align: center;border-right: 1px solid #000;">{{ $item->purity }}</td>
+                                            <td style="line-height:2.2; text-align: center;border-right: 1px solid #000;">{{ $item->weight }}</td>
+                                            <td style="line-height:2.2; text-align: center;border-right: 1px solid #000;">{{ format_currency($item->unit_price) }}</td>
+                                            <td style="line-height:2.2; text-align: center;border-right: 1px solid #000;">{{ format_currency($item->wage ?? 0) }}</td>
+                                            <td style="line-height:2.2; text-align: center;border-right: 1px solid #000;">{{ format_currency($item->sub_total) }}</td>
+                                        </tr>
+                                        @endforeach
+
+                                        @for ($j = count($itemsOnPage); $j < 5; $j++)
+                                        <tr>
+                                            <td style="line-height:2.2; border-right: 1px solid #000;">&nbsp;</td>
+                                            <td style="line-height:2.2; border-right: 1px solid #000;">&nbsp;</td>
+                                            <td style="line-height:2.2; border-right: 1px solid #000;">&nbsp;</td>
+                                            <td style="line-height:2.2; border-right: 1px solid #000;">&nbsp;</td>
+                                            <td style="line-height:2.2; border-right: 1px solid #000;">&nbsp;</td>
+                                            <td style="line-height:2.2; border-right: 1px solid #000;">&nbsp;</td>
+                                            <td style="line-height:2.2; border-right: 1px solid #000;">&nbsp;</td>
+                                        </tr>
+                                        @endfor
+                                        
+                                        @if ($pageNumber + 1 == $totalPages)
+                                        <tr>
+                                            <td style="padding: 4px; border-top: 1px solid #000;">&nbsp;</td>
+                                            <td colspan="2" style="padding: 4px; border-top: 1px solid #000; text-align:right;"><strong>JUMLAH BERAT</strong></td>
+                                            <td style="padding: 4px; text-align: center; border: 1px solid #000;"><strong>{{ $sale->saleDetails->sum('weight') }}</strong></td>
+                                            <td colspan="3" style="padding: 4px; border-top: 1px solid #000;"></td>
+                                        </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+
+                                <div style="display: flex; justify-content: flex-end;">
+                                    <table style="width:100%; margin-top:0px; font-size:15px; border: none;">
+                                        <tr>
+                                            <td style="width:50%; text-align:left; vertical-align:top;" rowspan="4">
+                                                Nama Jurujual: <strong>{{ $sale->sales_person_name ?? '-' }}</strong>
+                                            </td>
+                                            <td style="text-align:right !important;">JUMLAH ({{ settings()->currency->symbol }})</td>
+                                            <td style="text-align:right !important;">{{ format_currency($sale->saleDetails->sum('sub_total')) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:right !important;">TRADE IN LAMA ({{ settings()->currency->symbol }})</td>
+                                            <td style="text-align:right !important;">{{ format_currency($sale->trade_in_amount ?? 0) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:right !important;">ADJ ({{ settings()->currency->symbol }})</td>
+                                            <td style="text-align:right !important;">{{ format_currency($sale->adjustment_amount ?? 0) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:right !important;"><strong>TOTAL BAYARAN ({{ settings()->currency->symbol }})</strong></td>
+                                            <td style="text-align:right !important;"><strong>{{ format_currency($sale->total_amount) }}</strong></td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                
+        
+                                <div class="disclaimer-section" style="margin-top:0px; font-size:12px; text-align:center;">
+                                    <div class="footer-tagline">SAYA KEDAI EMAS AIDID GOLD MENJUAL BARANG TERSEBUT DENGAN HARGA YANG DI PERSETUJUI</div>
+                                    <br>
+                                    <div class="footer-tagline">DISCLAIMER:</div>
+                                    <div class="footer-tagline">SAYA TELAH MEMERIKSA DAN BERPUAS HATI DENGAN BARANG YANG DI BELI/ DI BAIKI BERADA DALAM KEADAAN BAIK</div>
+                                    <br>
+                                    <strong>"TERIMA KASIH SILA DATANG LAGI"</strong><br>
+                                    <br>
+                                    <div class="footer-tagline">
+                                        <span>AIDID GOLD SIMBOL KEMEWAHAN ANDA</span>
+                                        <span>CITARASA ANDA KEPUASAN KAMI</span>
+                                    </div>
+                                </div>
+
                             </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
