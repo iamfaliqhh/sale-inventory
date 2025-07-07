@@ -31,7 +31,7 @@ class Checkout extends Component
     public $trade_in_product_name = '';
     public $trade_in_product_code = '';
     public $trade_in_product_weight = '';
-    public $trade_in_product_purity = '';
+    public $trade_in_product_purity = '91.6';
     public $trade_in_total_value = 0;
 
     protected $rules = [
@@ -334,7 +334,7 @@ class Checkout extends Component
         $this->trade_in_product_name = '';
         $this->trade_in_product_code = '';
         $this->trade_in_product_weight = '';
-        $this->trade_in_product_purity = '';
+        $this->trade_in_product_purity = '91.6';
         $this->trade_in_total_value = 0;
     }
 }
