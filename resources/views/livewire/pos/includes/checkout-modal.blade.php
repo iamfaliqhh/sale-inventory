@@ -92,8 +92,8 @@
                             </div>
                         </div>
                     </div>
-
-                </div>                <div class="modal-footer">
+                </div>
+                <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
@@ -110,13 +110,13 @@ document.addEventListener('livewire:initialized', () => {
         const totalAmount = @this.total_amount;
         document.getElementById('total_amount').value = totalAmount.toFixed(2);
         document.getElementById('paid_amount').value = totalAmount.toFixed(2);
-        
+
         // Show the modal
         setTimeout(() => {
             $('#checkoutModal').modal('show');
         }, 100);
     });
-    
+
     // Also update when modal is manually opened
     $('#checkoutModal').on('show.bs.modal', function() {
         const totalAmount = @this.total_amount;
