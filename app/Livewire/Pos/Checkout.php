@@ -4,12 +4,14 @@ namespace App\Livewire\Pos;
 
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Livewire\Component;
+use Modules\Product\Entities\Category;
 use Modules\Product\Entities\Product;
+use Modules\Setting\Entities\Setting;
 
 class Checkout extends Component
 {
 
-    public $listeners = ['productSelected', 'discountModalRefresh'];
+    public $listeners = ['productSelected', 'discountModalRefresh', 'updateModalTotal'];
 
     public $cart_instance;
     public $customers;
@@ -70,6 +72,8 @@ class Checkout extends Component
 
     public function proceed() {
         if ($this->customer_id != null) {
+            // Ensure total is updated before showing modal
+            $this->total_amount = $this->calculateTotal();
             $this->dispatch('showCheckoutModal');
         } else {
             session()->flash('message', 'Please Select Customer!');
@@ -266,8 +270,17 @@ class Checkout extends Component
 
         $this->calculateTradeInValue();
 
-        $defaultCategory = \Modules\Product\Entities\Category::first();
-        $categoryId = $defaultCategory ? $defaultCategory->id : 1;
+
+        $categoryId = Setting::first()->default_trade_in_category_id;
+        if($categoryId === 0) {
+             $categoryId = Category::first()->id;
+             if(!$categoryId) {
+                $categoryId = Category::firstOrCreate([
+                    'category_name' => 'Trade In',
+                    'category_code' => 'trade_in',
+                ])->id;
+            }
+        }
 
         $tradeInProduct = Product::create([
             'product_name' => $this->trade_in_product_name,

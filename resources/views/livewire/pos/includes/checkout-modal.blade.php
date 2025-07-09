@@ -31,13 +31,13 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label for="total_amount">Total Amount <span class="text-danger">*</span></label>
-                                        <input id="total_amount" type="text" class="form-control" name="total_amount" value="{{ $total_amount }}" readonly required>
+                                        <input id="total_amount" type="text" class="form-control" name="total_amount" value="{{ number_format($total_amount, 2) }}" readonly required>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label for="paid_amount">Received Amount <span class="text-danger">*</span></label>
-                                        <input id="paid_amount" type="text" class="form-control" name="paid_amount" value="{{ $total_amount }}" required>
+                                        <input id="paid_amount" type="text" class="form-control" name="paid_amount" value="{{ number_format($total_amount, 2) }}" required>
                                     </div>
                                 </div>
                             </div>
@@ -93,8 +93,7 @@
                         </div>
                     </div>
 
-                </div>
-                <div class="modal-footer">
+                </div>                <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
@@ -102,3 +101,28 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('livewire:initialized', () => {
+    Livewire.on('showCheckoutModal', (data) => {
+        // Update the input values with current total
+        const totalAmount = @this.total_amount;
+        document.getElementById('total_amount').value = totalAmount.toFixed(2);
+        document.getElementById('paid_amount').value = totalAmount.toFixed(2);
+        
+        // Show the modal
+        setTimeout(() => {
+            $('#checkoutModal').modal('show');
+        }, 100);
+    });
+    
+    // Also update when modal is manually opened
+    $('#checkoutModal').on('show.bs.modal', function() {
+        const totalAmount = @this.total_amount;
+        document.getElementById('total_amount').value = totalAmount.toFixed(2);
+        document.getElementById('paid_amount').value = totalAmount.toFixed(2);
+    });
+});
+</script>
+@endpush

@@ -22,13 +22,16 @@
                         <form action="{{ route('settings.update') }}" method="POST">
                             @csrf
                             @method('patch')
-                            <div class="form-row">
-                                <div class="col-lg-4">
+                             <div class="form-row">
+                                <div class="col-lg-12">
                                     <div class="form-group">
                                         <label for="company_name">Company Name <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="company_name" value="{{ $settings->company_name }}" required>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="form-row">
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="company_email">Company Email <span class="text-danger">*</span></label>
@@ -39,6 +42,12 @@
                                     <div class="form-group">
                                         <label for="company_phone">Company Phone <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="company_phone" value="{{ $settings->company_phone }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="notification_email">Notification Email <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="notification_email" value="{{ $settings->notification_email }}" required>
                                     </div>
                                 </div>
                             </div>
@@ -65,8 +74,12 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label for="notification_email">Notification Email <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="notification_email" value="{{ $settings->notification_email }}" required>
+                                        <label for="default_trade_in_category">Default Trade In Category <span class="text-danger">*</span></label>
+                                        <select name="default_trade_in_category_id" id="default_trade_in_category_id" class="form-control" required>
+                                            @foreach(\Modules\Product\Entities\Category::all() as $categories)
+                                                <option {{ $settings->default_trade_in_category_id == $categories->id ? 'selected' : '' }} value="{{ $categories->id }}">{{ $categories->category_name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>

@@ -22,6 +22,7 @@ class StoreSettingsRequest extends FormRequest
             'company_address' => 'required|string|max:500',
             'default_currency_id' => 'required|numeric',
             'default_currency_position' => 'required|string|max:255',
+            'default_trade_in_category_id' => 'required|numeric',
             'footer_text' => 'nullable|string|max:255'
         ];
     }

@@ -6,7 +6,7 @@
             size: A4;
             margin: 1cm;
         }
-        
+
         .printable-page:not(:last-child) {
             padding-bottom: 30px;
             margin-bottom: 30px;
@@ -28,7 +28,7 @@
                 margin: 0 !important;
                 padding: 0 !important;
             }
-            
+
             .c-wrapper, .c-body, .c-main, .container-fluid {
                 margin: 0 !important;
                 padding: 0 !important;
@@ -62,7 +62,7 @@
                 width: 100%;
                 font-weight: normal;
             }
-            
+
             .printable-page:not(:last-child) {
                 padding-bottom: 0 !important;
                 margin-bottom: 0 !important;
@@ -117,7 +117,7 @@
 
                         @foreach ($saleDetailsChunks as $pageNumber => $itemsOnPage)
                             <div class="printable-page">
-                                
+
                                 <div style="text-align:center; font-size:14px;">
                                     <img src="{{ asset('images/print-header.png') }}" alt="Kedai Emas Aidid Gold" style="width:100%;">
                                     Dimiliki oleh: ASIA KASIH ENTERPRISE (002930393-A)
@@ -174,7 +174,7 @@
                                             <td style="line-height:2.2; border-right: 1px solid #000;">&nbsp;</td>
                                         </tr>
                                         @endfor
-                                        
+
                                         @if ($pageNumber + 1 == $totalPages)
                                         <tr>
                                             <td style="padding: 4px; border-top: 1px solid #000;">&nbsp;</td>
@@ -190,7 +190,9 @@
                                     <table style="width:100%; margin-top:0px; font-size:15px; border: none;">
                                         <tr>
                                             <td style="width:50%; text-align:left; vertical-align:top;" rowspan="4">
-                                                Nama Jurujual: <strong>{{ $sale->sales_person_name ?? '-' }}</strong>
+                                                @if($sale->sales_person_name)
+                                                    Nama Jurujual: <strong>{{ $sale->sales_person_name ?? '-' }}</strong>
+                                                @endif
                                             </td>
                                             <td style="text-align:right !important;">JUMLAH ({{ settings()->currency->symbol }})</td>
                                             <td style="text-align:right !important;">{{ format_currency($sale->saleDetails->sum('sub_total')) }}</td>
@@ -210,8 +212,8 @@
                                     </table>
                                 </div>
 
-                                
-        
+
+
                                 <div class="disclaimer-section" style="margin-top:0px; font-size:12px; text-align:center;">
                                     <div class="footer-tagline">SAYA KEDAI EMAS AIDID GOLD MENJUAL BARANG TERSEBUT DENGAN HARGA YANG DI PERSETUJUI</div>
                                     <br>
