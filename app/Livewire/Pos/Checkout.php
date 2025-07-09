@@ -77,7 +77,6 @@ class Checkout extends Component
     }
 
     public function calculateTotal() {
-        // Calculate total manually to handle negative trade-in values
         $cart = Cart::instance($this->cart_instance);
         $subtotal = 0;
 
@@ -135,25 +134,14 @@ class Checkout extends Component
     }
 
     public function removeItem($row_id) {
-        // Get the cart item before removing to check if it's a trade-in
         $cart_item = Cart::instance($this->cart_instance)->get($row_id);
 
-        // If it's a trade-in product, remove it from database too
-        if (isset($cart_item->options->is_trade_in) && $cart_item->options->is_trade_in) {
-            $product = Product::find($cart_item->id);
-            if ($product && $product->product_type === 'Trade In') {
-                $product->delete();
-            }
-
-            // Remove from tracking arrays
-            unset($this->check_quantity[$cart_item->id]);
-            unset($this->quantity[$cart_item->id]);
+        $product = Product::find($cart_item->id);
+        if ($product->product_type === 'Trade In') {
+            $product->delete();
         }
 
-        // Remove from cart
         Cart::instance($this->cart_instance)->remove($row_id);
-
-        // Recalculate total
         $this->total_amount = $this->calculateTotal();
     }
 
@@ -264,8 +252,11 @@ class Checkout extends Component
         }
     }
 
+    public function updatedTradeInProductWeight() {
+        $this->calculateTradeInValue();
+    }
+
     public function addTradeInProduct() {
-        // Validate the trade-in product form
         $this->validate([
             'trade_in_product_name' => 'required|string|max:255',
             'trade_in_product_code' => 'required|string|max:255|unique:products,product_code',
@@ -273,38 +264,30 @@ class Checkout extends Component
             'trade_in_product_purity' => 'required|numeric|min:1|max:100',
         ]);
 
-        // Calculate the trade-in value
         $this->calculateTradeInValue();
 
-        // Find default category or create one
         $defaultCategory = \Modules\Product\Entities\Category::first();
         $categoryId = $defaultCategory ? $defaultCategory->id : 1;
 
-        // Create the trade-in product in the database
         $tradeInProduct = Product::create([
             'product_name' => $this->trade_in_product_name,
             'product_code' => $this->trade_in_product_code,
             'product_weight' => $this->trade_in_product_weight,
             'product_purity' => $this->trade_in_product_purity,
-            'product_price' => $this->trade_in_total_value,
-            'product_cost' => $this->trade_in_total_value,
             'product_quantity' => 1,
             'product_type' => 'Trade In',
-            'product_unit' => 'gram',
+            'product_unit' => 'PC',
             'product_stock_alert' => 0,
-            'product_order_tax' => 0,
-            'product_tax_type' => 3,
             'category_id' => $categoryId,
         ]);
 
-        // Add to cart with negative value for trade-in
         $cart = Cart::instance($this->cart_instance);
         $cart->add([
             'id'      => $tradeInProduct->id,
             'name'    => $tradeInProduct->product_name,
             'qty'     => 1,
             'weight'  => $tradeInProduct->product_weight,
-            'price'   => -$this->trade_in_total_value, // Negative value for trade-in
+            'price'   => -$this->trade_in_total_value,
             'options' => [
                 'product_discount'      => 0.00,
                 'product_discount_type' => 'fixed',
@@ -319,10 +302,8 @@ class Checkout extends Component
             ]
         ]);
 
-        // Reset the form
         $this->resetTradeInForm();
 
-        // Update total amount
         $this->check_quantity[$tradeInProduct->id] = 1;
         $this->quantity[$tradeInProduct->id] = 1;
         $this->total_amount = $this->calculateTotal();

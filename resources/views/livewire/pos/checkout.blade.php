@@ -34,7 +34,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="trade_in_product_purity">Purity (%) <span class="text-danger">*</span></label>
-                            <input wire:model.blur="trade_in_product_purity" type="number" id="trade_in_product_purity" class="form-control" placeholder="0" min="1" max="100">
+                            <input wire:model.blur="trade_in_product_purity" type="number" id="trade_in_product_purity" class="form-control" placeholder="0.00" min="1" max="100" step=".01">
                             @error('trade_in_product_purity') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                     </div>

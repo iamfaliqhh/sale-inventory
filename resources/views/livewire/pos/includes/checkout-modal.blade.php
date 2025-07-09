@@ -11,9 +11,6 @@
             </div>
             <form id="checkout-form" action="{{ route('app.pos.store') }}" method="POST">
                 @csrf
-                @php
-                    $total_with_shipping = Cart::instance($cart_instance)->total() + (float) $shipping - (float) $global_discount + (float) $wage;
-                @endphp
                 <input type="hidden" name="type" id="type" value="">
                 <div class="modal-body">
                     @if (session()->has('checkout_message'))
@@ -34,17 +31,16 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label for="total_amount">Total Amount <span class="text-danger">*</span></label>
-                                        <input id="total_amount" type="text" class="form-control" name="total_amount" value="{{ $total_with_shipping }}" readonly required>
+                                        <input id="total_amount" type="text" class="form-control" name="total_amount" value="{{ $total_amount }}" readonly required>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label for="paid_amount">Received Amount <span class="text-danger">*</span></label>
-                                        <input id="paid_amount" type="text" class="form-control" name="paid_amount" value="{{ $total_with_shipping }}" required>
+                                        <input id="paid_amount" type="text" class="form-control" name="paid_amount" value="{{ $total_amount }}" required>
                                     </div>
                                 </div>
                             </div>
-                            {{-- Remove payment method and note fields unchanged --}}
                             <div class="form-group">
                                 <label for="payment_method">Payment Method <span class="text-danger">*</span></label>
                                 <select class="form-control" name="payment_method" id="payment_method" required>
@@ -71,11 +67,6 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    {{-- Remove Order Tax row --}}
-                                    {{-- <tr>
-                                        <th>Order Tax ({{ $global_tax }}%)</th>
-                                        <td>(+) {{ format_currency(Cart::instance($cart_instance)->tax()) }}</td>
-                                    </tr> --}}
                                     <tr>
                                         <th>Discount</th>
                                         <input type="hidden" value="{{ $global_discount }}" name="discount_amount">
@@ -94,7 +85,7 @@
                                     <tr class="text-primary">
                                         <th>Grand Total</th>
                                         <th>
-                                            (=) {{ format_currency($total_with_shipping) }}
+                                            (=) {{ format_currency($total_amount) }}
                                         </th>
                                     </tr>
                                 </table>
