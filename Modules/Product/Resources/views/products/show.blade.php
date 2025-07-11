@@ -83,7 +83,7 @@
                                 </tr>
                                 <tr>
                                     <th>Purity</th>
-                                    <td>{{ $product->product_purity . ' Karat' }}</td>
+                                    <td>{{ $product->product_purity }}</td>
                                 </tr>
                                 <tr>
                                     <th>Note</th>

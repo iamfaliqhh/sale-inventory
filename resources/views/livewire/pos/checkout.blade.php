@@ -9,14 +9,14 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="trade_in_product_name">Product Name <span class="text-danger">*</span></label>
+                            <label for="trade_in_product_name">Nama Produk <span class="text-danger">*</span></label>
                             <input wire:model="trade_in_product_name" type="text" id="trade_in_product_name" class="form-control" placeholder="Enter product name">
                             @error('trade_in_product_name') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="trade_in_product_code">Product Code <span class="text-danger">*</span></label>
+                            <label for="trade_in_product_code">Kode Produk <span class="text-danger">*</span></label>
                             <input wire:model="trade_in_product_code" type="text" id="trade_in_product_code" class="form-control" placeholder="Enter product code">
                             @error('trade_in_product_code') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
@@ -26,15 +26,15 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="trade_in_product_weight">Weight (grams) <span class="text-danger">*</span></label>
+                            <label for="trade_in_product_weight">Berat (grams) <span class="text-danger">*</span></label>
                             <input wire:model.blur="trade_in_product_weight" type="number" id="trade_in_product_weight" class="form-control" placeholder="0.00" step="0.01" min="0.01">
                             @error('trade_in_product_weight') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="trade_in_product_purity">Purity (%) <span class="text-danger">*</span></label>
-                            <input wire:model.blur="trade_in_product_purity" type="number" id="trade_in_product_purity" class="form-control" placeholder="0.00" min="1" max="100" step=".01">
+                            <label for="trade_in_product_purity">Ketulenan<span class="text-danger">*</span></label>
+                            <input wire:model.blur="trade_in_product_purity" type="number" id="trade_in_product_purity" class="form-control" placeholder="0" min="1" max="1000">
                             @error('trade_in_product_purity') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                     </div>

@@ -33,14 +33,14 @@ class Checkout extends Component
     public $trade_in_product_name = '';
     public $trade_in_product_code = '';
     public $trade_in_product_weight = '';
-    public $trade_in_product_purity = '91.6';
+    public $trade_in_product_purity = '916';
     public $trade_in_total_value = 0;
 
     protected $rules = [
         'trade_in_product_name' => 'required|string|max:255',
         'trade_in_product_code' => 'required|string|max:255|unique:products,product_code',
         'trade_in_product_weight' => 'required|numeric|min:0.01',
-        'trade_in_product_purity' => 'required|numeric|min:1|max:100',
+        'trade_in_product_purity' => 'required|numeric|min:1|max:1000',
     ];
 
     public function mount($cartInstance, $customers, $salesPersons) {
@@ -265,7 +265,7 @@ class Checkout extends Component
             'trade_in_product_name' => 'required|string|max:255',
             'trade_in_product_code' => 'required|string|max:255|unique:products,product_code',
             'trade_in_product_weight' => 'required|numeric|min:0.01',
-            'trade_in_product_purity' => 'required|numeric|min:1|max:100',
+            'trade_in_product_purity' => 'required|numeric|min:1|max:1000',
         ]);
 
         $this->calculateTradeInValue();
@@ -328,7 +328,7 @@ class Checkout extends Component
         $this->trade_in_product_name = '';
         $this->trade_in_product_code = '';
         $this->trade_in_product_weight = '';
-        $this->trade_in_product_purity = '91.6';
+        $this->trade_in_product_purity = '916';
         $this->trade_in_total_value = 0;
     }
 }

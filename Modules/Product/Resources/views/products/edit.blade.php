@@ -77,8 +77,8 @@
                             <div class="form-row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="product_purity">Purity (in Karat) <span class="text-danger">*</span></label>
-                                        <input type="number" class="form-control" name="product_purity" required value="{{ $product->product_purity }}" min="1" max="24" step="0.01">
+                                        <label for="product_purity">Ketulenan <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" name="product_purity" required value="{{ $product->product_purity }}" min="1" max="1000" >
                                     </div>
                                 </div>
                                 <div class="col-md-4">

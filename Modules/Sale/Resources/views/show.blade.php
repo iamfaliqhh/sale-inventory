@@ -50,7 +50,7 @@
                 margin: 15px auto;
                 width: 100%;
             }
-            
+
             .printable .disclaimer-section {
                 margin-top: 0px;
                 padding-left: 14px;
@@ -157,7 +157,7 @@
                                             <td style="line-height:2.2; text-align: left; border-right: 1px solid #000; text-transform:uppercase; padding-left:10px">{{ $item->product_name }}</td>
                                             <td style="line-height:2.2; text-align: center;border-right: 1px solid #000;">{{ $item->purity }}</td>
                                             <td style="line-height:2.2; text-align: center;border-right: 1px solid #000;">{{ $item->weight }}</td>
-                                            <td style="line-height:2.2; text-align: center;border-right: 1px solid #000;">{{ format_currency($item->unit_price) }}</td>
+                                            <td style="line-height:2.2; text-align: center;border-right: 1px solid #000;">{{ format_currency($item->unit_price / $item->weight) }}</td>
                                             <td style="line-height:2.2; text-align: center;border-right: 1px solid #000;">{{ format_currency($item->wage ?? 0) }}</td>
                                             <td style="line-height:2.2; text-align: center;border-right: 1px solid #000;">{{ format_currency($item->sub_total) }}</td>
                                         </tr>
