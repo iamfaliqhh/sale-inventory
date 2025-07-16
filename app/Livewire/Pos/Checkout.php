@@ -16,9 +16,9 @@ class Checkout extends Component
     public $cart_instance;
     public $customers;
     public $sales_persons;
-    public int $global_discount = 0;
-    public int $shipping = 0;
-    public int $wage = 0;
+    public float $global_discount = 0;
+    public float $shipping = 0;
+    public float $wage = 0;
     public $quantity;
     public $check_quantity;
     public $discount_type;
@@ -47,7 +47,7 @@ class Checkout extends Component
         $this->cart_instance = $cartInstance;
         $this->customers = $customers;
         $this->sales_persons = $salesPersons;
-        $this->global_discount = 0;
+        $this->global_discount = 0.00;
         $this->shipping = 0.00;
         $this->wage = 0.00;
         $this->check_quantity = [];

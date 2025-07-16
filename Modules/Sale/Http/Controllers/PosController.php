@@ -69,7 +69,7 @@ class PosController extends Controller
                 'sales_person_name' => $request->sales_person_id ? SalesPerson::findOrFail($request->sales_person_id)->sales_person_name : null,
                 'discount_amount' => $request->discount_amount * 100,
                 'shipping_amount' => $request->shipping_amount * 100,
-                'wage_amount' => $request->wage_amount,
+                'wage_amount' => $request->wage_amount * 100,
                 'paid_amount' => $request->paid_amount * 100,
                 'total_amount' => $request->total_amount * 100,
                 'due_amount' => $due_amount * 100,

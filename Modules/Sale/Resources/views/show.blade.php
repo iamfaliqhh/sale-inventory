@@ -146,7 +146,6 @@
                                             <th style="line-height:2.2; text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;">Ketulenan</th>
                                             <th style="line-height:2.2; text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;">Berat (g)</th>
                                             <th style="line-height:2.2; text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;">Harga Emas ({{ settings()->currency->symbol }}/g)</th>
-                                            <th style="line-height:2.2; text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;">Upah ({{ settings()->currency->symbol }})</th>
                                             <th style="line-height:2.2; text-align: center; border-bottom: 1px solid #000; border-right: 1px solid #000;">Jumlah ({{ settings()->currency->symbol }})</th>
                                         </tr>
                                     </thead>
@@ -158,14 +157,12 @@
                                             <td style="line-height:2.2; text-align: center;border-right: 1px solid #000;">{{ $item->purity }}</td>
                                             <td style="line-height:2.2; text-align: center;border-right: 1px solid #000;">{{ $item->weight }}</td>
                                             <td style="line-height:2.2; text-align: center;border-right: 1px solid #000;">{{ format_currency($item->unit_price / $item->weight) }}</td>
-                                            <td style="line-height:2.2; text-align: center;border-right: 1px solid #000;">{{ format_currency($item->wage ?? 0) }}</td>
                                             <td style="line-height:2.2; text-align: center;border-right: 1px solid #000;">{{ format_currency($item->sub_total) }}</td>
                                         </tr>
                                         @endforeach
 
-                                        @for ($j = count($itemsOnPage); $j < 5; $j++)
+                                        @for ($j = count($itemsOnPage); $j < 4; $j++)
                                         <tr>
-                                            <td style="line-height:2.2; border-right: 1px solid #000;">&nbsp;</td>
                                             <td style="line-height:2.2; border-right: 1px solid #000;">&nbsp;</td>
                                             <td style="line-height:2.2; border-right: 1px solid #000;">&nbsp;</td>
                                             <td style="line-height:2.2; border-right: 1px solid #000;">&nbsp;</td>
@@ -178,9 +175,10 @@
                                         @if ($pageNumber + 1 == $totalPages)
                                         <tr>
                                             <td style="padding: 4px; border-top: 1px solid #000;">&nbsp;</td>
-                                            <td colspan="2" style="padding: 4px; border-top: 1px solid #000; text-align:right;"><strong>JUMLAH BERAT</strong></td>
+                                            <td colspan="2" style="padding: 4px; border-top: 1px solid #000; text-align:right;"><strong>JUMLAH BERAT&nbsp;</strong></td>
                                             <td style="padding: 4px; text-align: center; border: 1px solid #000;"><strong>{{ $sale->saleDetails->sum('weight') }}</strong></td>
-                                            <td colspan="3" style="padding: 4px; border-top: 1px solid #000;"></td>
+                                            <td style="padding: 4px; border-top: 1px solid #000; text-align:right;"><strong>JUMLAH ({{ settings()->currency->symbol }})&nbsp;</strong></td>
+                                            <td style="padding: 4px; text-align: center; border: 1px solid #000;"><strong>{{ format_currency($sale->saleDetails->sum('sub_total')) }}</strong></td>
                                         </tr>
                                         @endif
                                     </tbody>
@@ -189,21 +187,21 @@
                                 <div style="display: flex; justify-content: flex-end;">
                                     <table style="width:100%; margin-top:0px; font-size:15px; border: none;">
                                         <tr>
-                                            <td style="width:50%; text-align:left; vertical-align:top;" rowspan="4">
+                                            <td style="width:50%; text-align:left; vertical-align:top;" rowspan="5">
                                                 @if($sale->sales_person_name)
                                                     Nama Jurujual: <strong>{{ $sale->sales_person_name ?? '-' }}</strong>
                                                 @endif
                                             </td>
-                                            <td style="text-align:right !important;">JUMLAH ({{ settings()->currency->symbol }})</td>
-                                            <td style="text-align:right !important;">{{ format_currency($sale->saleDetails->sum('sub_total')) }}</td>
+                                            <td style="text-align:right !important;">DISKAUN ({{ settings()->currency->symbol }})</td>
+                                            <td style="text-align:right !important;">-{{ format_currency($sale->discount_amount ?? 0) }}</td>
                                         </tr>
                                         <tr>
-                                            <td style="text-align:right !important;">TRADE IN LAMA ({{ settings()->currency->symbol }})</td>
-                                            <td style="text-align:right !important;">{{ format_currency($sale->trade_in_amount ?? 0) }}</td>
+                                            <td style="text-align:right !important;">HANTAR ({{ settings()->currency->symbol }})</td>
+                                            <td style="text-align:right !important;">{{ format_currency($sale->shipping_amount ?? 0) }}</td>
                                         </tr>
                                         <tr>
-                                            <td style="text-align:right !important;">ADJ ({{ settings()->currency->symbol }})</td>
-                                            <td style="text-align:right !important;">{{ format_currency($sale->adjustment_amount ?? 0) }}</td>
+                                            <td style="text-align:right !important;">UPAH ({{ settings()->currency->symbol }})</td>
+                                            <td style="text-align:right !important;">{{ format_currency($sale->wage_amount ?? 0) }}</td>
                                         </tr>
                                         <tr>
                                             <td style="text-align:right !important;"><strong>TOTAL BAYARAN ({{ settings()->currency->symbol }})</strong></td>

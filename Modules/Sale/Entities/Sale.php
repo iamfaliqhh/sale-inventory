@@ -48,11 +48,11 @@ class Sale extends Model
         return $value / 100;
     }
 
-    public function getTaxAmountAttribute($value) {
+    public function getDiscountAmountAttribute($value) {
         return $value / 100;
     }
 
-    public function getDiscountAmountAttribute($value) {
+    public function getWageAmountAttribute($value) {
         return $value / 100;
     }
 }

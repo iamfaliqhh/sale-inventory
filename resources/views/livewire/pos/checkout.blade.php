@@ -27,14 +27,14 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="trade_in_product_weight">Berat (grams) <span class="text-danger">*</span></label>
-                            <input wire:model.blur="trade_in_product_weight" type="number" id="trade_in_product_weight" class="form-control" placeholder="0.00" step="0.01" min="0.01">
+                            <input wire:model.live="trade_in_product_weight" type="number" id="trade_in_product_weight" class="form-control" placeholder="0.00" step="0.01" min="0.01">
                             @error('trade_in_product_weight') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="trade_in_product_purity">Ketulenan<span class="text-danger">*</span></label>
-                            <input wire:model.blur="trade_in_product_purity" type="number" id="trade_in_product_purity" class="form-control" placeholder="0" min="1" max="1000">
+                            <input wire:model.live="trade_in_product_purity" type="number" id="trade_in_product_purity" class="form-control" placeholder="0" min="1" max="1000">
                             @error('trade_in_product_purity') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                     </div>
@@ -185,11 +185,13 @@
                             <tr>
                                 <th>Subtotal</th>
                                 @php
+                                    // fr i didnt know why theres delay update on backend so i did this manually
                                     $cart = Cart::instance($cart_instance);
                                     $subtotal = 0;
                                     foreach ($cart->content() as $item) {
                                         $subtotal += ($item->price * $item->qty);
                                     }
+                                    $total_amount = $subtotal - $global_discount + $shipping + $wage;
                                 @endphp
                                 <td>{{ format_currency($subtotal) }}</td>
                             </tr>
@@ -209,11 +211,8 @@
                             </tr>
                             <tr class="text-primary">
                                 <th>Grand Total</th>
-                                @php
-                                    $total_with_shipping = $total_amount;
-                                @endphp
                                 <th>
-                                    (=) {{ format_currency($total_with_shipping) }}
+                                    (=) {{ format_currency($total_amount) }}
                                 </th>
                             </tr>
                         </table>
@@ -224,19 +223,19 @@
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="discount_amount">Discount (Amount)</label>
-                        <input wire:model.blur="global_discount" type="number" class="form-control" min="0" value="{{ $global_discount }}" required>
+                        <input wire:model.live="global_discount" type="number" class="form-control" min="0" value="{{ $global_discount }}" required step="0.01">
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="shipping_amount">Shipping</label>
-                        <input wire:model.blur="shipping" type="number" class="form-control" min="0" value="0" required step="0.01">
+                        <input wire:model.live="shipping" type="number" class="form-control" min="0" value="{{ $shipping }}" required step="0.01">
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="wage_amount">Wage</label>
-                        <input wire:model.blur="wage" type="number" class="form-control" min="0" value="{{ $wage }}" required step="0.01">
+                        <input wire:model.live="wage" type="number" class="form-control" min="0" value="{{ $wage }}" required step="0.01">
                     </div>
                 </div>
             </div>
